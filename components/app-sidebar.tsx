@@ -71,13 +71,16 @@ export function AppSidebar({
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200",
                 active
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:translate-x-0.5 hover:bg-accent hover:text-accent-foreground",
               )}
             >
-              <Icon className="size-4" />
+              {active ? (
+                <span className="absolute inset-y-1.5 left-0 w-1 rounded-r-full bg-primary-foreground/80" />
+              ) : null}
+              <Icon className="size-4 transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 motion-reduce:group-hover:scale-100" />
               {item.label}
             </Link>
           );

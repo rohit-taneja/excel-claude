@@ -35,11 +35,11 @@ export function SkillCard({
   const percent = statusToPercent(status);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="group flex flex-col transition-all duration-200 ease-out hover:-translate-y-2 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/25 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <CardHeader className="gap-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-muted text-foreground">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-muted text-foreground transition-all duration-200 group-hover:scale-125 group-hover:-rotate-6 group-hover:bg-primary/15 group-hover:text-primary motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0">
               <SkillIcon name={skill.icon} className="size-5" />
             </div>
             <div>

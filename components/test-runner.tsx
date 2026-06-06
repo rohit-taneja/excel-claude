@@ -134,15 +134,19 @@ export function TestRunner({
 
       <Card className="transition-shadow duration-300 hover:shadow-md">
         <CardContent className="pt-6">
-          <QuestionRenderer
+          <div
             key={question.id}
-            question={question}
-            value={answers[question.id] ?? ""}
-            onChange={(v) => setAnswer(question.id, v)}
-            index={current}
-            total={total}
-            disabled={submitting}
-          />
+            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-right-6 motion-safe:duration-300"
+          >
+            <QuestionRenderer
+              question={question}
+              value={answers[question.id] ?? ""}
+              onChange={(v) => setAnswer(question.id, v)}
+              index={current}
+              total={total}
+              disabled={submitting}
+            />
+          </div>
         </CardContent>
         <CardFooter className="justify-between gap-2">
           <Button

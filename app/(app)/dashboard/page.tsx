@@ -23,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { CountUp } from "@/components/count-up";
 import { SkillIcon } from "@/components/skill-icon";
 import { WeakSkillsCard } from "@/components/weak-skills-card";
 import {
@@ -37,7 +38,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="animate-enter">
         <h1 className="text-2xl font-semibold tracking-tight">
           Hi, <span className="capitalize">{user.username}</span> 👋
         </h1>
@@ -47,16 +48,19 @@ export default async function DashboardPage() {
       </div>
 
       {/* Top stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Overall progress</CardDescription>
-            <CardTitle className="text-3xl">{overview.overallPercent}%</CardTitle>
+            <CardTitle className="text-3xl">
+              <CountUp value={overview.overallPercent} suffix="%" />
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <Progress value={overview.overallPercent} />
             <p className="text-xs text-muted-foreground">
-              {overview.completedCount} of {overview.totalSkills} skills completed
+              {overview.completedCount} of {overview.totalSkills} skills
+              completed
             </p>
           </CardContent>
         </Card>
@@ -64,7 +68,9 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>In progress</CardDescription>
-            <CardTitle className="text-3xl">{overview.inProgressCount}</CardTitle>
+            <CardTitle className="text-3xl">
+              <CountUp value={overview.inProgressCount} />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground">
@@ -77,7 +83,11 @@ export default async function DashboardPage() {
           <CardHeader className="pb-2">
             <CardDescription>Average test score</CardDescription>
             <CardTitle className="text-3xl">
-              {overview.averageScore != null ? `${overview.averageScore}%` : "—"}
+              {overview.averageScore != null ? (
+                <CountUp value={overview.averageScore} suffix="%" />
+              ) : (
+                "—"
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -92,7 +102,7 @@ export default async function DashboardPage() {
           <CardHeader className="pb-2">
             <CardDescription>Tests taken</CardDescription>
             <CardTitle className="text-3xl">
-              {overview.recentAttempts.length}
+              <CountUp value={overview.recentAttempts.length} />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -106,7 +116,7 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="stagger grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {/* Continue learning + recommended */}
           <div className="grid gap-4 sm:grid-cols-2">
@@ -164,7 +174,9 @@ export default async function DashboardPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex flex-wrap gap-1.5">
-                    <PriorityBadge priority={overview.nextRecommendedSkill.priority} />
+                    <PriorityBadge
+                      priority={overview.nextRecommendedSkill.priority}
+                    />
                     <DifficultyBadge
                       difficulty={overview.nextRecommendedSkill.difficulty}
                     />
@@ -187,8 +199,8 @@ export default async function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    You&apos;ve begun every skill. Revisit weak areas or take the
-                    final readiness test.
+                    You&apos;ve begun every skill. Revisit weak areas or take
+                    the final readiness test.
                   </p>
                 </CardContent>
               </Card>
@@ -263,11 +275,13 @@ export default async function DashboardPage() {
                           </Link>
                           <p className="text-xs text-muted-foreground">
                             {formatDate(attempt.submittedAt)} ·{" "}
-                            {attempt.correctCount}/{attempt.totalQuestions} correct ·{" "}
-                            {formatDuration(attempt.durationSeconds)}
+                            {attempt.correctCount}/{attempt.totalQuestions}{" "}
+                            correct · {formatDuration(attempt.durationSeconds)}
                           </p>
                         </div>
-                        <Badge variant={attempt.score >= 60 ? "success" : "warning"}>
+                        <Badge
+                          variant={attempt.score >= 60 ? "success" : "warning"}
+                        >
                           {attempt.score}%
                         </Badge>
                       </li>

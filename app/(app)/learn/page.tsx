@@ -13,15 +13,15 @@ export default async function LearnPage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="animate-enter">
         <h1 className="text-2xl font-semibold tracking-tight">Learn</h1>
         <p className="text-muted-foreground">
-          17 job-ready Excel skills in a recommended learning order. Start at the
-          top and work down.
+          17 job-ready Excel skills in a recommended learning order. Start at
+          the top and work down.
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {skills.map((skill) => {
           const p = progressById.get(skill.id);
           return (

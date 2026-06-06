@@ -87,7 +87,12 @@ export function AppShell({
                 active ? "text-primary" : "text-muted-foreground",
               )}
             >
-              <Icon className="size-5" />
+              <Icon
+                className={cn(
+                  "size-5 transition-transform duration-200 motion-reduce:transition-none",
+                  active && "-translate-y-1 scale-125",
+                )}
+              />
               {item.label}
             </Link>
           );

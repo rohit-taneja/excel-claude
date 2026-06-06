@@ -135,17 +135,21 @@ export function PracticeRunner({
 
       <Card className="transition-shadow duration-300 hover:shadow-md">
         <CardContent className="pt-6">
-          <QuestionRenderer
+          <div
             key={question.id}
-            question={question}
-            value={answers[question.id] ?? ""}
-            onChange={(v) =>
-              setAnswers((prev) => ({ ...prev, [question.id]: v }))
-            }
-            review={review}
-            index={index}
-            total={total}
-          />
+            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-right-6 motion-safe:duration-300"
+          >
+            <QuestionRenderer
+              question={question}
+              value={answers[question.id] ?? ""}
+              onChange={(v) =>
+                setAnswers((prev) => ({ ...prev, [question.id]: v }))
+              }
+              review={review}
+              index={index}
+              total={total}
+            />
+          </div>
         </CardContent>
         <CardFooter className="flex-wrap justify-between gap-2">
           <Button

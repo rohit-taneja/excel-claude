@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { CountUp } from "@/components/count-up";
 import {
   Table,
   TableBody,
@@ -35,7 +36,7 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="animate-enter">
         <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
         <p className="text-muted-foreground">
           Track your mastery across skills and review every test attempt.
@@ -43,11 +44,13 @@ export default async function ReportsPage() {
       </div>
 
       {/* Summary stats */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="stagger grid gap-4 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Overall completion</CardDescription>
-            <CardTitle className="text-3xl">{overview.overallPercent}%</CardTitle>
+            <CardTitle className="text-3xl">
+              <CountUp value={overview.overallPercent} suffix="%" />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Progress value={overview.overallPercent} />
@@ -57,7 +60,7 @@ export default async function ReportsPage() {
           <CardHeader className="pb-2">
             <CardDescription>Skills completed</CardDescription>
             <CardTitle className="text-3xl">
-              {overview.completedCount}/{overview.totalSkills}
+              <CountUp value={overview.completedCount} />/{overview.totalSkills}
             </CardTitle>
           </CardHeader>
         </Card>
@@ -65,13 +68,17 @@ export default async function ReportsPage() {
           <CardHeader className="pb-2">
             <CardDescription>Average test score</CardDescription>
             <CardTitle className="text-3xl">
-              {overview.averageScore != null ? `${overview.averageScore}%` : "—"}
+              {overview.averageScore != null ? (
+                <CountUp value={overview.averageScore} suffix="%" />
+              ) : (
+                "—"
+              )}
             </CardTitle>
           </CardHeader>
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="stagger grid gap-6 lg:grid-cols-3">
         {/* Skill mastery */}
         <Card className="lg:col-span-2">
           <CardHeader>
@@ -105,7 +112,11 @@ export default async function ReportsPage() {
                 </div>
                 <Progress
                   value={
-                    status === "completed" ? 100 : status === "in_progress" ? Math.max(score, 50) : 0
+                    status === "completed"
+                      ? 100
+                      : status === "in_progress"
+                        ? Math.max(score, 50)
+                        : 0
                   }
                 />
               </div>
@@ -147,7 +158,7 @@ export default async function ReportsPage() {
       </div>
 
       {/* Attempt history */}
-      <Card>
+      <Card className="animate-enter">
         <CardHeader>
           <CardTitle className="text-lg">Test attempt history</CardTitle>
         </CardHeader>
@@ -192,7 +203,9 @@ export default async function ReportsPage() {
                       {formatDuration(attempt.durationSeconds)}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Badge variant={attempt.score >= 60 ? "success" : "warning"}>
+                      <Badge
+                        variant={attempt.score >= 60 ? "success" : "warning"}
+                      >
                         {attempt.score}%
                       </Badge>
                     </TableCell>

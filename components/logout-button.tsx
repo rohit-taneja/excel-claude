@@ -6,6 +6,7 @@ import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export function LogoutButton() {
       disabled={pending}
       onClick={handleLogout}
     >
-      <LogOut />
+      {pending ? <Spinner label="Logging out" /> : <LogOut />}
     </Button>
   );
 }
