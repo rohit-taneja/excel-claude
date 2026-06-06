@@ -1,0 +1,20 @@
+{
+  "id": "data-cleaning-test",
+  "title": "Data Cleaning Test",
+  "description": "Tidy messy data with TRIM, LEFT/RIGHT/MID and safe lookups using IFERROR.",
+  "category": "mixed",
+  "difficulty": "medium",
+  "skills": ["trim", "text-functions", "iferror", "xlookup"],
+  "durationMinutes": 15,
+  "passingScore": 60,
+  "questionIds": [
+    "cleaning-001",
+    "cleaning-002",
+    "cleaning-003",
+    "cleaning-004",
+    "cleaning-005",
+    "cleaning-006",
+    "misc-001",
+    "combo-009"
+  ]
+}

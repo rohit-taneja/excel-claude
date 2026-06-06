@@ -1,0 +1,52 @@
+{
+  "id": "iferror",
+  "title": "IFERROR",
+  "order": 7,
+  "priority": "high",
+  "category": "Error Handling",
+  "summary": "IFERROR catches errors from a formula and returns a value you choose instead, keeping reports clean and professional. It traps errors like #N/A, #DIV/0!, and #VALUE!.",
+  "syntax": "=IFERROR(value, value_if_error)",
+  "difficulty": "easy",
+  "icon": "ShieldAlert",
+  "jobUseCases": [
+    "Showing 'Not Found' instead of #N/A when a lookup fails on a dashboard",
+    "Displaying 0 or a blank when dividing by an empty cell to avoid #DIV/0!",
+    "Cleaning up imported data where some calculations produce errors",
+    "Presenting a friendly message in management reports instead of raw error codes",
+    "Preventing error cells from breaking downstream SUM or AVERAGE totals"
+  ],
+  "examples": [
+    {
+      "title": "Friendly lookup failure",
+      "formula": "=IFERROR(VLOOKUP(G2, A2:D100, 3, FALSE), \"Not Found\")",
+      "explanation": "If the VLOOKUP cannot find the value in G2, the cell shows 'Not Found' instead of #N/A. The first argument is the formula to try; the second is the fallback."
+    },
+    {
+      "title": "Avoiding divide-by-zero",
+      "formula": "=IFERROR(B2/C2, 0)",
+      "explanation": "If C2 is blank or zero, the division would error, so IFERROR returns 0 instead of #DIV/0!. This keeps the column clean for further calculations."
+    },
+    {
+      "title": "Blank instead of error",
+      "formula": "=IFERROR(D2*E2, \"\")",
+      "explanation": "Returns an empty string when the multiplication errors (for example if a cell contains text), leaving the cell visually blank in the report."
+    },
+    {
+      "title": "Wrapping INDEX + MATCH",
+      "formula": "=IFERROR(INDEX(C2:C100, MATCH(H2, A2:A100, 0)), \"No match\")",
+      "explanation": "Catches the #N/A that MATCH throws when H2 is not found and shows 'No match' instead, so the dashboard stays tidy."
+    }
+  ],
+  "commonMistakes": [
+    "Using IFERROR to hide genuine errors that signal a real data problem, masking bugs",
+    "Wrapping too broadly so a typo elsewhere in the formula is silently swallowed",
+    "Confusing IFERROR with IFNA; IFERROR catches all errors while IFNA catches only #N/A",
+    "Returning 0 when blank would be more appropriate, which skews averages and counts",
+    "Forgetting that older Excel versions used ISERROR with IF instead of IFERROR"
+  ],
+  "practiceTips": [
+    "Use IFNA when you only want to trap not-found errors and still see other problems",
+    "Keep the fallback value meaningful: 'Not Found' for lookups, 0 or blank for math",
+    "Prefer building the formula correctly first, then add IFERROR only for expected failures"
+  ]
+}

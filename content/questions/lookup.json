@@ -1,0 +1,205 @@
+[
+  {
+    "id": "lookup-001",
+    "title": "XLOOKUP a salary",
+    "skills": ["xlookup"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "Using the employee table below, write an XLOOKUP formula in F2 that returns the Salary (column C) for the employee named \"Priya\" (look up the name in column A).",
+    "dataset": {
+      "headers": ["Name", "Department", "Salary"],
+      "rows": [
+        ["Amit", "Sales", 50000],
+        ["Priya", "HR", 62000],
+        ["Rahul", "Finance", 58000],
+        ["Sara", "Sales", 71000]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 5."
+    },
+    "expectedConcepts": ["XLOOKUP"],
+    "acceptedAnswers": [
+      "=XLOOKUP(\"Priya\",A2:A5,C2:C5)",
+      "=XLOOKUP(\"Priya\",A:A,C:C)"
+    ],
+    "expectedOutput": "62000",
+    "explanation": "XLOOKUP(lookup_value, lookup_array, return_array) searches the lookup array for the value and returns the matching item from the return array. \"Priya\" is found in A3, so the Salary from C3 (62000) is returned.",
+    "hint": "XLOOKUP takes the value to find, the column to search, then the column to return from.",
+    "points": 10
+  },
+  {
+    "id": "lookup-002",
+    "title": "XLOOKUP with not-found message",
+    "skills": ["xlookup"],
+    "type": "formula_input",
+    "difficulty": "medium",
+    "prompt": "Write an XLOOKUP formula in F2 that returns the Department (column B) for the name in cell E2, but shows the text \"Not found\" if the name does not exist in column A.",
+    "dataset": {
+      "headers": ["Name", "Department", "Salary"],
+      "rows": [
+        ["Amit", "Sales", 50000],
+        ["Priya", "HR", 62000],
+        ["Rahul", "Finance", 58000],
+        ["Sara", "Sales", 71000]
+      ],
+      "note": "Headers in row 1; the lookup name is typed into E2."
+    },
+    "expectedConcepts": ["XLOOKUP"],
+    "acceptedAnswers": [
+      "=XLOOKUP(E2,A2:A5,B2:B5,\"Not found\")",
+      "=XLOOKUP(E2,A:A,B:B,\"Not found\")"
+    ],
+    "expectedOutput": "Not found",
+    "explanation": "XLOOKUP has a built-in fourth argument, if_not_found, that replaces the old IFERROR(VLOOKUP(...)) workaround. When E2 holds a name that is not in column A, the formula returns \"Not found\" instead of #N/A.",
+    "hint": "XLOOKUP's fourth argument lets you supply your own message when nothing matches.",
+    "points": 10
+  },
+  {
+    "id": "lookup-003",
+    "title": "XLOOKUP output prediction",
+    "skills": ["xlookup"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "Given the product table below, what does =XLOOKUP(\"P-103\", A2:A5, C2:C5) return?",
+    "dataset": {
+      "headers": ["SKU", "Product", "Price"],
+      "rows": [
+        ["P-101", "Keyboard", 1200],
+        ["P-102", "Mouse", 600],
+        ["P-103", "Monitor", 9500],
+        ["P-104", "Webcam", 2300]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 5."
+    },
+    "correctAnswer": "9500",
+    "expectedOutput": "9500",
+    "explanation": "XLOOKUP finds \"P-103\" in A4 and returns the value from the same row in the return array C2:C5, which is the Price 9500.",
+    "hint": "Find the row whose SKU is P-103, then read across to the Price column.",
+    "points": 10
+  },
+  {
+    "id": "lookup-004",
+    "title": "VLOOKUP a price",
+    "skills": ["vlookup"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "Using the product table below, write a VLOOKUP formula in F2 that returns the Price (3rd column) for the SKU \"P-102\" (look up in the 1st column). Use an exact match.",
+    "dataset": {
+      "headers": ["SKU", "Product", "Price"],
+      "rows": [
+        ["P-101", "Keyboard", 1200],
+        ["P-102", "Mouse", 600],
+        ["P-103", "Monitor", 9500],
+        ["P-104", "Webcam", 2300]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 5. SKU is column A, Product B, Price C."
+    },
+    "expectedConcepts": ["VLOOKUP"],
+    "acceptedAnswers": [
+      "=VLOOKUP(\"P-102\",A2:C5,3,FALSE)",
+      "=VLOOKUP(\"P-102\",A2:C5,3,0)",
+      "=VLOOKUP(\"P-102\",A:C,3,FALSE)"
+    ],
+    "expectedOutput": "600",
+    "explanation": "VLOOKUP(lookup_value, table_array, col_index_num, range_lookup) searches the FIRST column of the table for the value and returns the item from the given column number. Price is the 3rd column of A2:C5, and FALSE forces an exact match. The answer is 600.",
+    "hint": "The column index is counted from the left edge of the table array, and the last argument FALSE means exact match.",
+    "points": 10
+  },
+  {
+    "id": "lookup-005",
+    "title": "Fix the VLOOKUP",
+    "skills": ["vlookup"],
+    "type": "fix_formula",
+    "difficulty": "medium",
+    "prompt": "This VLOOKUP should return Sara's Department from the table, but it returns the wrong value because the column index is wrong and the match type is missing. Department is the 2nd column of the table. Fix it.",
+    "dataset": {
+      "headers": ["Name", "Department", "Salary"],
+      "rows": [
+        ["Amit", "Sales", 50000],
+        ["Priya", "HR", 62000],
+        ["Rahul", "Finance", 58000],
+        ["Sara", "Operations", 71000]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 5. Name is column A, Department B, Salary C."
+    },
+    "brokenFormula": "=VLOOKUP(\"Sara\", A2:C5, 3)",
+    "expectedConcepts": ["VLOOKUP"],
+    "acceptedAnswers": [
+      "=VLOOKUP(\"Sara\",A2:C5,2,FALSE)",
+      "=VLOOKUP(\"Sara\",A2:C5,2,0)",
+      "=VLOOKUP(\"Sara\",A:C,2,FALSE)"
+    ],
+    "expectedOutput": "Operations",
+    "explanation": "Department is the 2nd column of the table, so col_index_num must be 2, not 3. Adding FALSE forces an exact match instead of risking an approximate one on unsorted data. The corrected formula returns \"Operations\".",
+    "hint": "Count the columns from the left to fix the index, and always add FALSE for an exact match.",
+    "points": 10
+  },
+  {
+    "id": "lookup-006",
+    "title": "Why VLOOKUP fails left",
+    "skills": ["vlookup"],
+    "type": "mcq",
+    "difficulty": "hard",
+    "prompt": "A table has Salary in column A and Name in column B. A colleague wants to find the Name for a given Salary using =VLOOKUP(salary, A:B, ...). Separately, they want to look up Salary given a Name in column B. Why does the second lookup (Name to Salary) fail with plain VLOOKUP?",
+    "options": [
+      "VLOOKUP can only search its leftmost column, and Name is to the right of Salary, so it cannot look left to return Salary by Name",
+      "VLOOKUP cannot return text values such as names",
+      "VLOOKUP requires the table to be sorted alphabetically by name first",
+      "VLOOKUP only works when the table has exactly two columns"
+    ],
+    "correctAnswer": "VLOOKUP can only search its leftmost column, and Name is to the right of Salary, so it cannot look left to return Salary by Name",
+    "explanation": "VLOOKUP always searches the first (leftmost) column of the table_array and can only return columns to its right. To look up by a right-hand column and return a left-hand one, use INDEX+MATCH or XLOOKUP, which have no left/right restriction.",
+    "hint": "Think about which column VLOOKUP is forced to search and which direction it can return from.",
+    "points": 10
+  },
+  {
+    "id": "lookup-007",
+    "title": "INDEX + MATCH lookup",
+    "skills": ["index-match"],
+    "type": "formula_input",
+    "difficulty": "hard",
+    "prompt": "The table has Salary in column A and Name in column B. Write an INDEX/MATCH formula in F2 that returns the Salary (column A) for the name \"Rahul\" found in column B. (VLOOKUP cannot do this because the return column is to the left.)",
+    "dataset": {
+      "headers": ["Salary", "Name"],
+      "rows": [
+        [50000, "Amit"],
+        [62000, "Priya"],
+        [58000, "Rahul"],
+        [71000, "Sara"]
+      ],
+      "note": "Headers in row 1; Salary is column A, Name is column B. Data spans rows 2 to 5."
+    },
+    "expectedConcepts": ["INDEX", "MATCH"],
+    "acceptedAnswers": [
+      "=INDEX(A2:A5,MATCH(\"Rahul\",B2:B5,0))",
+      "=INDEX(A:A,MATCH(\"Rahul\",B:B,0))",
+      "=INDEX(A2:A5,MATCH(\"Rahul\",B2:B5,FALSE))"
+    ],
+    "expectedOutput": "58000",
+    "explanation": "MATCH(\"Rahul\", B2:B5, 0) finds Rahul's position (3rd row of the range), and INDEX(A2:A5, 3) returns the value at that position from the Salary column. The 0 in MATCH means exact match. INDEX+MATCH can return a column to the left, which VLOOKUP cannot.",
+    "hint": "MATCH finds the row position of the name; INDEX pulls the salary from that same position.",
+    "points": 10
+  },
+  {
+    "id": "lookup-008",
+    "title": "INDEX + MATCH output",
+    "skills": ["index-match"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "Using the table below, what does =INDEX(C2:C5, MATCH(\"Sara\", A2:A5, 0)) return?",
+    "dataset": {
+      "headers": ["Name", "Department", "Salary"],
+      "rows": [
+        ["Amit", "Sales", 50000],
+        ["Priya", "HR", 62000],
+        ["Rahul", "Finance", 58000],
+        ["Sara", "Operations", 71000]
+      ],
+      "note": "Headers in row 1; Name is column A, Department B, Salary C. Data spans rows 2 to 5."
+    },
+    "correctAnswer": "71000",
+    "expectedOutput": "71000",
+    "explanation": "MATCH(\"Sara\", A2:A5, 0) returns 4 because Sara is the 4th name in the range. INDEX(C2:C5, 4) then returns the 4th Salary, which is 71000.",
+    "hint": "First work out Sara's position in the name list, then read the salary at that same position.",
+    "points": 10
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "id": "sort",
+  "title": "SORT",
+  "order": 16,
+  "priority": "low",
+  "category": "Dynamic Arrays",
+  "summary": "SORT returns a range sorted by one or more columns, spilling a live ordered copy of your data without touching or rearranging the original.",
+  "syntax": "=SORT(array, [sort_index], [sort_order])",
+  "difficulty": "easy",
+  "icon": "ArrowUpDown",
+  "jobUseCases": [
+    "Show a top-to-bottom ranking of salespeople by revenue on a dashboard",
+    "Order a customer list alphabetically for a clean printed report",
+    "Sort tasks by due date so the most urgent appear first",
+    "Build a leaderboard that re-orders automatically as scores update",
+    "Present products from highest to lowest margin without altering the source table"
+  ],
+  "examples": [
+    {
+      "title": "Sort ascending (default)",
+      "formula": "=SORT(A2:B50)",
+      "explanation": "By default SORT orders by the first column in ascending order. Given names and sales in A2:B50, it spills an alphabetically sorted copy, leaving your original list untouched."
+    },
+    {
+      "title": "Sort by a specific column, descending",
+      "formula": "=SORT(A2:B50, 2, -1)",
+      "explanation": "The sort_index 2 sorts by the second column (Sales) and sort_order -1 makes it descending, so the highest sales appear first. Use 1 for ascending and -1 for descending."
+    },
+    {
+      "title": "Sort by multiple columns",
+      "formula": "=SORT(A2:C50, {3,2}, {1,-1})",
+      "explanation": "Pass arrays to sort on more than one key. Here it sorts by column 3 ascending first, then by column 2 descending as a tie-breaker, useful for grouping by region then ranking sales within each."
+    },
+    {
+      "title": "Sort the result of a FILTER",
+      "formula": "=SORT(FILTER(A2:C100, C2:C100=\"North\"), 2, -1)",
+      "explanation": "Nest FILTER inside SORT to first keep only North-region rows, then order them by Sales descending. This single formula produces a clean, ranked, filtered table that updates live."
+    }
+  ],
+  "commonMistakes": [
+    "Giving a sort_index larger than the number of columns in the array, which causes a #VALUE! error",
+    "Using a sort_order other than 1 or -1, which is invalid",
+    "Letting the spill area collide with existing content, producing a #SPILL! error",
+    "Expecting SORT to change the original data; it returns a separate sorted copy and leaves the source as-is",
+    "Mismatching the lengths of the sort_index and sort_order arrays when sorting by multiple columns"
+  ],
+  "practiceTips": [
+    "Remember sort_order is 1 (ascending) or -1 (descending), not TRUE/FALSE.",
+    "Use SORTBY when you want to sort one range by the values in a different range.",
+    "Reference an Excel Table so the sorted output grows automatically with new rows.",
+    "Combine with UNIQUE and FILTER to build clean, ordered, deduplicated lists in one formula."
+  ]
+}

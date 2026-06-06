@@ -1,0 +1,20 @@
+{
+  "id": "beginner-test",
+  "title": "Beginner Excel Test",
+  "description": "Core formula basics: IF, SUMIFS and COUNTIFS. A great first check of your foundations.",
+  "category": "mixed",
+  "difficulty": "easy",
+  "skills": ["if", "sumifs", "countifs"],
+  "durationMinutes": 15,
+  "passingScore": 60,
+  "questionIds": [
+    "if-001",
+    "if-002",
+    "if-003",
+    "sumifs-001",
+    "sumifs-003",
+    "sumifs-005",
+    "countifs-001",
+    "countifs-003"
+  ]
+}

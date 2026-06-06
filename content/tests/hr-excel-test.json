@@ -1,0 +1,19 @@
+{
+  "id": "hr-excel-test",
+  "title": "HR Excel Test",
+  "description": "HR-style scenarios: eligibility checks, headcounts, tenure and working-day calculations.",
+  "category": "job-simulation",
+  "difficulty": "medium",
+  "skills": ["if", "countifs", "datedif", "networkdays"],
+  "durationMinutes": 20,
+  "passingScore": 65,
+  "questionIds": [
+    "if-006",
+    "countifs-001",
+    "countifs-005",
+    "misc-003",
+    "misc-004",
+    "combo-006",
+    "combo-007"
+  ]
+}

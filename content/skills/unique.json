@@ -1,0 +1,53 @@
+{
+  "id": "unique",
+  "title": "UNIQUE",
+  "order": 17,
+  "priority": "low",
+  "category": "Dynamic Arrays",
+  "summary": "UNIQUE returns a list of the distinct values from a range, removing duplicates automatically and updating live as the source data changes.",
+  "syntax": "=UNIQUE(array)",
+  "difficulty": "easy",
+  "icon": "Fingerprint",
+  "jobUseCases": [
+    "Build a clean list of distinct regions to feed a dropdown or PivotTable",
+    "Count how many unique customers placed orders this month",
+    "Generate a deduplicated list of product names from a messy transaction log",
+    "Find one-off entries that appear exactly once in a dataset for review",
+    "Create a master list of departments from raw HR records for reporting"
+  ],
+  "examples": [
+    {
+      "title": "Distinct values from a column",
+      "formula": "=UNIQUE(C2:C100)",
+      "explanation": "Given a Region column full of repeats, this spills a list of each region just once (North, South, East, West). The output updates automatically when new regions are added to the source."
+    },
+    {
+      "title": "Count distinct customers",
+      "formula": "=COUNTA(UNIQUE(A2:A100))",
+      "explanation": "Wrapping UNIQUE in COUNTA returns how many distinct customer names exist in A2:A100. This is the modern, formula-driven way to get a unique count without a PivotTable."
+    },
+    {
+      "title": "Unique combinations across columns",
+      "formula": "=UNIQUE(A2:B100)",
+      "explanation": "Passing a two-column range returns each distinct row combination, e.g. unique Region + Salesperson pairs. Rows that share both values are collapsed into a single entry."
+    },
+    {
+      "title": "Values that appear exactly once",
+      "formula": "=UNIQUE(A2:A100, FALSE, TRUE)",
+      "explanation": "The third argument exactly_once set to TRUE returns only values that occur a single time in the data, filtering out anything that repeats. Useful for spotting one-off or anomalous entries."
+    }
+  ],
+  "commonMistakes": [
+    "Confusing the second argument (by_col) with the third (exactly_once); by default both are FALSE",
+    "Letting the spill range hit existing data, which triggers a #SPILL! error until the cells are cleared",
+    "Treating trailing spaces or case differences as identical; 'North' and 'North ' are counted as two distinct values",
+    "Expecting a sorted result; UNIQUE keeps original order, so wrap it in SORT for an ordered list",
+    "Using UNIQUE in Excel 2019 or earlier, where the function does not exist"
+  ],
+  "practiceTips": [
+    "Combine with SORT, like =SORT(UNIQUE(C2:C100)), to get a clean, alphabetised distinct list.",
+    "Use TRIM and UPPER on the source first if inconsistent spacing or casing is splitting your values.",
+    "Feed a UNIQUE spill range (with #) into Data Validation for an auto-updating dropdown.",
+    "Pair UNIQUE with COUNTA for a fast distinct count instead of a helper PivotTable."
+  ]
+}

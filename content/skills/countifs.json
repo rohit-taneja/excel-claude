@@ -1,0 +1,52 @@
+{
+  "id": "countifs",
+  "title": "COUNTIFS",
+  "order": 3,
+  "priority": "high",
+  "category": "Core Formula",
+  "summary": "COUNTIFS counts how many rows meet one or more criteria across columns. It is essential for building dashboards, summaries, and frequency counts.",
+  "syntax": "=COUNTIFS(criteria_range1, criteria1, [criteria_range2, criteria2], ...)",
+  "difficulty": "easy",
+  "icon": "Hash",
+  "jobUseCases": [
+    "Counting how many employees belong to a specific department and location",
+    "Tallying the number of orders above a certain value for a sales report",
+    "Counting open support tickets assigned to a particular agent",
+    "Measuring how many candidates passed each round in a hiring funnel",
+    "Counting transactions that fall within a chosen date range"
+  ],
+  "examples": [
+    {
+      "title": "Count one category",
+      "formula": "=COUNTIFS(A2:A100, \"Sales\")",
+      "explanation": "Counts how many cells in A2:A100 contain the department 'Sales'. With a single condition it behaves like COUNTIF."
+    },
+    {
+      "title": "Two conditions",
+      "formula": "=COUNTIFS(A2:A100, \"Sales\", B2:B100, \"Mumbai\")",
+      "explanation": "Counts employees who are in the 'Sales' department AND based in 'Mumbai'. A row is counted only when both conditions are TRUE."
+    },
+    {
+      "title": "Numeric threshold",
+      "formula": "=COUNTIFS(C2:C100, \">50000\")",
+      "explanation": "Counts how many orders in C2:C100 exceed 50,000. The operator and value go together inside one set of quotes."
+    },
+    {
+      "title": "Count within a date range",
+      "formula": "=COUNTIFS(D2:D100, \">=\"&DATE(2026,1,1), D2:D100, \"<=\"&DATE(2026,1,31))",
+      "explanation": "Counts records dated in January 2026 by referencing the same date column twice with two boundary conditions."
+    }
+  ],
+  "commonMistakes": [
+    "Confusing COUNTIFS (count rows) with SUMIFS (add values); COUNTIFS has no sum_range",
+    "Giving criteria ranges of different lengths, which triggers a #VALUE! error",
+    "Forgetting to join operators with &, e.g. \">=D2\" instead of \">=\"&D2",
+    "Expecting OR logic when COUNTIFS applies AND across all criteria pairs",
+    "Counting blank cells unexpectedly; use \"<>\" to count non-blanks or \"\" to count blanks"
+  ],
+  "practiceTips": [
+    "Use COUNTIFS to power dashboard KPI tiles like 'Open Tickets' or 'Deals Won'",
+    "Combine with wildcards (* and ?) to count partial text matches",
+    "Reference dropdown cells as criteria to make counts interactive"
+  ]
+}

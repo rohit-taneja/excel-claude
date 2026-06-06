@@ -1,0 +1,102 @@
+[
+  {
+    "id": "pivot-001",
+    "title": "Which field area gives one row per region?",
+    "skills": ["pivot-tables"],
+    "type": "scenario",
+    "difficulty": "easy",
+    "prompt": "You have a table of orders with columns Region, Product, and Sales. You want a PivotTable that shows one row per Region with the total sales next to each region. Which fields go where?",
+    "dataset": {
+      "headers": ["Region", "Product", "Sales"],
+      "rows": [
+        ["North", "Laptop", 60000],
+        ["South", "Mouse", 4000],
+        ["North", "Monitor", 18000],
+        ["East", "Laptop", 55000]
+      ],
+      "note": "You want the report grouped down the page by Region."
+    },
+    "options": [
+      "Region in Rows, Sales in Values",
+      "Sales in Rows, Region in Values",
+      "Region in Columns, Sales in Filters",
+      "Region in Values, Sales in Rows"
+    ],
+    "correctAnswer": "Region in Rows, Sales in Values",
+    "explanation": "Fields dragged into the Rows area become the labels going down the left side (one row per unique Region). Numeric fields in the Values area are summarized for each row, so Sales in Values gives the total per region. Text fields belong in Rows/Columns/Filters; numbers you want to total belong in Values.",
+    "hint": "The area that creates the labels down the page is Rows; the area that aggregates numbers is Values.",
+    "points": 10
+  },
+  {
+    "id": "pivot-002",
+    "title": "Default summary for a numeric Values field",
+    "skills": ["pivot-tables"],
+    "type": "mcq",
+    "difficulty": "easy",
+    "prompt": "When you drag a purely numeric field such as Sales into the Values area of a PivotTable, how does Excel summarize it by default?",
+    "options": [
+      "Sum of the values",
+      "Count of the values",
+      "Average of the values",
+      "Maximum of the values"
+    ],
+    "correctAnswer": "Sum of the values",
+    "explanation": "For a field that contains only numbers, Excel defaults the Values summary to Sum. (If the field contains text or blanks, it defaults to Count instead.) You can change the summary by right-clicking a value and choosing Summarize Values By, or via Value Field Settings.",
+    "hint": "Numbers get added up by default; text-or-blank fields get counted.",
+    "points": 10
+  },
+  {
+    "id": "pivot-003",
+    "title": "Build a Region x Category cross-tab",
+    "skills": ["pivot-tables"],
+    "type": "scenario",
+    "difficulty": "medium",
+    "prompt": "Finance wants a matrix where each Region is a row, each Product Category is a column, and every cell shows total Sales for that region-and-category combination. Which arrangement of fields produces this two-dimensional cross-tab?",
+    "options": [
+      "Region in Rows, Category in Columns, Sales in Values",
+      "Region in Rows, Category in Rows, Sales in Values",
+      "Region in Filters, Category in Columns, Sales in Rows",
+      "Category in Rows, Region in Values, Sales in Columns"
+    ],
+    "correctAnswer": "Region in Rows, Category in Columns, Sales in Values",
+    "explanation": "A cross-tab (matrix) needs one field in Rows and a second field in Columns; the intersection cells are filled by the field in Values. Putting Region in Rows and Category in Columns creates the grid, and Sales in Values (summed) fills each cell with the total for that region-category pair.",
+    "hint": "A matrix uses both the Rows area and the Columns area, with the number in Values.",
+    "points": 10
+  },
+  {
+    "id": "pivot-004",
+    "title": "Roll daily dates up into months",
+    "skills": ["pivot-tables"],
+    "type": "scenario",
+    "difficulty": "medium",
+    "prompt": "Your PivotTable has hundreds of individual Order Date rows, but management wants a clean monthly trend. Without changing the source data or adding a helper column, how do you collapse the daily dates into months?",
+    "options": [
+      "Right-click a date in the PivotTable and choose Group, then select Months",
+      "Sort the date field from oldest to newest",
+      "Move the Order Date field from Rows into the Filters area",
+      "Change the Order Date Values summary to Average"
+    ],
+    "correctAnswer": "Right-click a date in the PivotTable and choose Group, then select Months",
+    "explanation": "PivotTable Grouping lets you bucket a date field by Days, Months, Quarters, or Years. Right-clicking any date and choosing Group > Months (and Years) rolls the daily transactions up into monthly totals automatically, no formulas or helper columns required. Sorting or filtering only reorders or hides rows; it does not aggregate them.",
+    "hint": "Look for the Group option on the right-click menu of a date field.",
+    "points": 10
+  },
+  {
+    "id": "pivot-005",
+    "title": "Stale numbers after the data changed",
+    "skills": ["pivot-tables"],
+    "type": "scenario",
+    "difficulty": "easy",
+    "prompt": "You added 50 new sales rows to the source table that already feeds an existing PivotTable, but the PivotTable still shows the old totals. The source range already includes the new rows. What single action updates the report?",
+    "options": [
+      "Right-click the PivotTable and choose Refresh (or Data > Refresh All)",
+      "Re-type each total manually in the PivotTable",
+      "Delete the PivotTable and re-insert it every time",
+      "Change the Values field from Sum to Count and back"
+    ],
+    "correctAnswer": "Right-click the PivotTable and choose Refresh (or Data > Refresh All)",
+    "explanation": "A PivotTable caches a snapshot of the source data, so it does not update automatically when the underlying rows change. Refreshing (right-click > Refresh, or Data > Refresh All) re-reads the source and recalculates every total. Using an Excel Table (Ctrl+T) as the source also ensures newly added rows are included before you refresh.",
+    "hint": "PivotTables hold a cached copy of the data; there is a one-click command to re-read it.",
+    "points": 10
+  }
+]

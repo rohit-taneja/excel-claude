@@ -1,0 +1,140 @@
+[
+  {
+    "id": "if-001",
+    "title": "Pass or Fail flag",
+    "skills": ["if"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "The HR team scored candidates on an Excel assessment. In cell C2, write a formula that returns \"Pass\" when the score in B2 is 40 or higher, and \"Fail\" otherwise.",
+    "dataset": {
+      "headers": ["Candidate", "Score", "Result"],
+      "rows": [
+        ["Amit", 52, ""],
+        ["Priya", 38, ""],
+        ["Rahul", 40, ""],
+        ["Sara", 67, ""]
+      ],
+      "note": "Headers are in row 1; the first candidate is in row 2."
+    },
+    "expectedConcepts": ["IF"],
+    "acceptedAnswers": [
+      "=IF(B2>=40,\"Pass\",\"Fail\")",
+      "=IF(B2>=40,\"Pass\",\"Fail\" )",
+      "=IF(B2<40,\"Fail\",\"Pass\")"
+    ],
+    "expectedOutput": "Pass",
+    "explanation": "IF(condition, value_if_true, value_if_false) returns the second argument when the test is TRUE. B2>=40 is TRUE for Amit (52), so C2 shows \"Pass\". Text results must be wrapped in double quotes.",
+    "hint": "The 40-or-higher cut-off means you need the >= operator, not just >.",
+    "points": 10
+  },
+  {
+    "id": "if-002",
+    "title": "Target Met choice",
+    "skills": ["if"],
+    "type": "mcq",
+    "difficulty": "easy",
+    "prompt": "A sales tracker holds each rep's monthly revenue in column B starting at B2. Which formula correctly flags a rep as \"Target Met\" when revenue is at least 100000, otherwise \"Below Target\"?",
+    "options": [
+      "=IF(B2>=100000, \"Target Met\", \"Below Target\")",
+      "=IF(B2>=100000, Target Met, Below Target)",
+      "=IF(B2>=100000) THEN \"Target Met\" ELSE \"Below Target\"",
+      "=IF(\"Target Met\", B2>=100000, \"Below Target\")"
+    ],
+    "correctAnswer": "=IF(B2>=100000, \"Target Met\", \"Below Target\")",
+    "explanation": "The condition comes first, then the TRUE result, then the FALSE result. Text outputs must be in double quotes, otherwise Excel raises a #NAME? error. Excel does not use THEN/ELSE keywords.",
+    "hint": "Excel needs quotes around any text it returns, and the condition is always the first argument.",
+    "points": 10
+  },
+  {
+    "id": "if-003",
+    "title": "Bonus or zero output",
+    "skills": ["if"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "The formula =IF(C2>50000, C2*0.1, 0) sits in cell D2 to calculate a 10% incentive. Given Sara's order value of 80000 in C2, what value does D2 display?",
+    "dataset": {
+      "headers": ["Rep", "Region", "OrderValue", "Incentive"],
+      "rows": [
+        ["Sara", "North", 80000, ""]
+      ],
+      "note": "Rep is column A, Region is B, OrderValue is C, Incentive is D."
+    },
+    "correctAnswer": "8000",
+    "expectedOutput": "8000",
+    "explanation": "E2 (80000) is greater than 50000, so the TRUE branch runs: 80000 * 0.1 = 8000. value_if_true and value_if_false can be calculations, not just fixed text.",
+    "hint": "Check whether the condition is TRUE first, then evaluate only the matching branch.",
+    "points": 10
+  },
+  {
+    "id": "if-004",
+    "title": "Grade bands with nested IF",
+    "skills": ["if"],
+    "type": "formula_input",
+    "difficulty": "hard",
+    "prompt": "In cell C2, assign a letter grade to Rahul's score in B2 using these bands: 90 or above = \"A\", 75 or above = \"B\", 60 or above = \"C\", anything else = \"D\".",
+    "dataset": {
+      "headers": ["Student", "Score", "Grade"],
+      "rows": [
+        ["Rahul", 82, ""],
+        ["Amit", 91, ""],
+        ["Priya", 58, ""],
+        ["Sara", 76, ""]
+      ],
+      "note": "Headers in row 1; data starts in row 2."
+    },
+    "expectedConcepts": ["IF"],
+    "acceptedAnswers": [
+      "=IF(B2>=90,\"A\",IF(B2>=75,\"B\",IF(B2>=60,\"C\",\"D\")))",
+      "=IFS(B2>=90,\"A\",B2>=75,\"B\",B2>=60,\"C\",TRUE,\"D\")"
+    ],
+    "expectedOutput": "B",
+    "explanation": "Nested IFs are evaluated top to bottom and the first TRUE condition wins, so you must order the thresholds from highest to lowest. Rahul's 82 fails >=90 but passes >=75, giving \"B\". IFS is a cleaner alternative for many bands.",
+    "hint": "Start your conditions from the highest threshold so lower bands stay reachable.",
+    "points": 10
+  },
+  {
+    "id": "if-005",
+    "title": "Fix the broken IF",
+    "skills": ["if"],
+    "type": "fix_formula",
+    "difficulty": "medium",
+    "prompt": "This formula in C2 should show \"Overdue\" when the balance in B2 is greater than 0 and \"Cleared\" otherwise, but it returns a #NAME? error. Fix it.",
+    "dataset": {
+      "headers": ["Invoice", "Balance", "Status"],
+      "rows": [
+        ["INV-101", 1200, ""],
+        ["INV-102", 0, ""],
+        ["INV-103", 540, ""]
+      ],
+      "note": "Headers in row 1; data starts in row 2."
+    },
+    "brokenFormula": "=IF(B2>0, Overdue, Cleared)",
+    "expectedConcepts": ["IF"],
+    "acceptedAnswers": [
+      "=IF(B2>0,\"Overdue\",\"Cleared\")",
+      "=IF(B2<=0,\"Cleared\",\"Overdue\")"
+    ],
+    "expectedOutput": "Overdue",
+    "explanation": "The #NAME? error appears because Overdue and Cleared were not wrapped in double quotes, so Excel tried to read them as named ranges. Wrapping both text results in quotes fixes it: =IF(B2>0,\"Overdue\",\"Cleared\").",
+    "hint": "Excel treats unquoted words as range names. What do text results always need around them?",
+    "points": 10
+  },
+  {
+    "id": "if-006",
+    "title": "Choosing the right logic",
+    "skills": ["if"],
+    "type": "scenario",
+    "difficulty": "medium",
+    "prompt": "A finance analyst wants column D to show \"Approve\" only when BOTH the request amount in B2 is under 5000 AND the manager flag in C2 equals \"Yes\"; otherwise \"Review\". Which formula meets the requirement?",
+    "options": [
+      "=IF(AND(B2<5000, C2=\"Yes\"), \"Approve\", \"Review\")",
+      "=IF(OR(B2<5000, C2=\"Yes\"), \"Approve\", \"Review\")",
+      "=IF(B2<5000, C2=\"Yes\", \"Approve\")",
+      "=IF(B2<5000 AND C2=\"Yes\", \"Approve\", \"Review\")"
+    ],
+    "correctAnswer": "=IF(AND(B2<5000, C2=\"Yes\"), \"Approve\", \"Review\")",
+    "explanation": "Because both conditions must be true at once, AND() is the correct logical wrapper inside IF. OR() would approve when only one condition holds, and Excel cannot read the bare 'AND' keyword inside a comparison the way the last option assumes.",
+    "hint": "When two conditions must hold together, which logical function combines them?",
+    "points": 10
+  }
+]

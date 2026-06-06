@@ -1,0 +1,52 @@
+{
+  "id": "trim",
+  "title": "TRIM",
+  "order": 8,
+  "priority": "high",
+  "category": "Data Cleaning",
+  "summary": "TRIM removes extra spaces from text, leaving only single spaces between words and no leading or trailing spaces. It is a first step in cleaning imported or pasted data.",
+  "syntax": "=TRIM(text)",
+  "difficulty": "easy",
+  "icon": "Eraser",
+  "jobUseCases": [
+    "Cleaning customer names imported from a CRM that have trailing spaces",
+    "Fixing lookup failures caused by hidden spaces around employee IDs",
+    "Standardizing product codes pasted from PDFs or emails",
+    "Preparing text columns before matching, sorting, or removing duplicates",
+    "Tidying survey responses where users added accidental extra spaces"
+  ],
+  "examples": [
+    {
+      "title": "Remove extra spaces",
+      "formula": "=TRIM(\"  Amit   Sharma  \")",
+      "explanation": "Returns 'Amit Sharma'. TRIM strips leading and trailing spaces and collapses the multiple spaces between words into a single space."
+    },
+    {
+      "title": "Clean a cell reference",
+      "formula": "=TRIM(A2)",
+      "explanation": "Cleans whatever text is in A2, useful before using it in a VLOOKUP or comparison where stray spaces would cause a mismatch."
+    },
+    {
+      "title": "Fix lookups with hidden spaces",
+      "formula": "=VLOOKUP(TRIM(G2), A2:D100, 2, FALSE)",
+      "explanation": "Trims the lookup value in G2 so a trailing space does not break the match against the table. Spaces are a frequent cause of #N/A errors."
+    },
+    {
+      "title": "Combine with CLEAN for messy imports",
+      "formula": "=TRIM(CLEAN(A2))",
+      "explanation": "CLEAN removes non-printable characters and TRIM removes extra spaces, together producing tidy text from data copied out of other systems."
+    }
+  ],
+  "commonMistakes": [
+    "Expecting TRIM to remove spaces inside words; it only collapses runs of spaces between words",
+    "Assuming TRIM removes non-breaking spaces (CHAR 160) from web data; it does not, use SUBSTITUTE for those",
+    "Forgetting to convert the TRIM result to values with Paste Special before deleting the original column",
+    "Using TRIM on numbers and expecting them to stay numeric; TRIM always returns text",
+    "Overlooking that TRIM does not remove tabs or line breaks, which need CLEAN"
+  ],
+  "practiceTips": [
+    "Run TRIM on key columns before doing lookups, sorts, or duplicate removal",
+    "Pair TRIM with CLEAN to handle both extra spaces and non-printable characters",
+    "For stubborn non-breaking spaces, use SUBSTITUTE(A2, CHAR(160), \" \") inside TRIM"
+  ]
+}

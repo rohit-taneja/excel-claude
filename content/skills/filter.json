@@ -1,0 +1,53 @@
+{
+  "id": "filter",
+  "title": "FILTER",
+  "order": 15,
+  "priority": "medium",
+  "category": "Dynamic Arrays",
+  "summary": "FILTER returns only the rows from a range that meet a condition you specify, spilling the live results into the sheet automatically as data changes.",
+  "syntax": "=FILTER(array, include, [if_empty])",
+  "difficulty": "medium",
+  "icon": "Filter",
+  "jobUseCases": [
+    "Pull all orders for a selected region onto a summary tab without manual filtering",
+    "Build a live list of employees in one department for a team report",
+    "Show only invoices over a threshold for a finance follow-up list",
+    "Create a self-updating dashboard table driven by a dropdown selection",
+    "Extract overdue support tickets matching multiple criteria for triage"
+  ],
+  "examples": [
+    {
+      "title": "Filter rows by one condition",
+      "formula": "=FILTER(A2:D100, C2:C100=\"South\")",
+      "explanation": "This returns every row in A2:D100 where the Region column (C) equals South. The results spill below the formula and update instantly whenever the source data changes, with no manual AutoFilter needed."
+    },
+    {
+      "title": "Two conditions with AND",
+      "formula": "=FILTER(A2:D100, (C2:C100=\"South\")*(D2:D100>50000))",
+      "explanation": "Multiplying conditions acts as AND, so this returns South-region rows with Sales above 50,000. Each comparison yields TRUE/FALSE (1/0), and multiplying keeps only rows where both are true."
+    },
+    {
+      "title": "Either condition with OR",
+      "formula": "=FILTER(A2:D100, (C2:C100=\"South\")+(C2:C100=\"East\"))",
+      "explanation": "Adding conditions acts as OR, returning rows where the region is South OR East. Use + for OR and * for AND when combining multiple include tests."
+    },
+    {
+      "title": "Handle no matches gracefully",
+      "formula": "=FILTER(A2:D100, C2:C100=H1, \"No records found\")",
+      "explanation": "The optional third argument is returned when nothing matches, so instead of a #CALC! error the cell shows 'No records found'. Here H1 holds a region picked from a dropdown, making the table interactive."
+    }
+  ],
+  "commonMistakes": [
+    "Mismatching the array and include sizes (different number of rows), which throws a #VALUE! error",
+    "Omitting the if_empty argument, so an empty result shows the #CALC! error instead of a friendly message",
+    "Using AND()/OR() functions inside include; you must use * for AND and + for OR on the arrays",
+    "Letting the spill range overwrite other data; if blocked it shows #SPILL! until you clear cells below",
+    "Forgetting FILTER needs Microsoft 365 or Excel 2021; it will not work in older versions"
+  ],
+  "practiceTips": [
+    "Reference whole columns of an Excel Table (e.g. Table1[Region]) so FILTER auto-extends with new rows.",
+    "Combine FILTER with SORT, like =SORT(FILTER(...)), to return filtered and ordered results in one step.",
+    "Drive the criteria from a Data Validation dropdown cell to build interactive reports.",
+    "Always add an if_empty message to avoid #CALC! when no rows match."
+  ]
+}

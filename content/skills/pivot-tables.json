@@ -1,0 +1,53 @@
+{
+  "id": "pivot-tables",
+  "title": "PivotTables",
+  "order": 10,
+  "priority": "high",
+  "category": "Analysis",
+  "summary": "PivotTables let you summarize, group, and analyze large datasets in seconds by dragging fields into rows, columns, and values without writing a single formula.",
+  "syntax": "Select data > Insert > PivotTable > drag fields into Rows / Columns / Values / Filters",
+  "difficulty": "medium",
+  "icon": "Table2",
+  "jobUseCases": [
+    "Summarize total sales by region and product category for a monthly review deck",
+    "Count headcount by department and location for an HR org report",
+    "Build a month-over-month revenue trend by dragging dates into Columns",
+    "Find top-performing salespeople by sorting a Sum of Sales value field",
+    "Create a quick expense breakdown by vendor and cost centre for finance"
+  ],
+  "examples": [
+    {
+      "title": "Sales by region",
+      "formula": "Insert > PivotTable > Region to Rows > Sales to Values (Sum)",
+      "explanation": "With a table of orders, drag the Region field into Rows and the Sales field into Values. Excel returns one row per region showing total sales (e.g. North 4,52,000; South 3,18,000). Right-click a value > Summarize Values By to switch between Sum, Count, and Average."
+    },
+    {
+      "title": "Two-dimensional summary (Region x Category)",
+      "formula": "Region to Rows > Category to Columns > Sales to Values (Sum)",
+      "explanation": "Put Region in Rows and Product Category in Columns to build a matrix. Each cell shows sales for that region-category combination, giving you a cross-tab view that highlights which categories sell best in each region."
+    },
+    {
+      "title": "Group dates by month",
+      "formula": "Order Date to Rows > right-click a date > Group > Months and Years",
+      "explanation": "Drag a date field into Rows, then right-click any date and choose Group. Selecting Months and Years rolls daily transactions up into monthly totals so you can show a clean Jan-Dec trend instead of hundreds of individual days."
+    },
+    {
+      "title": "Show values as % of total",
+      "formula": "Sales to Values > right-click value > Show Values As > % of Grand Total",
+      "explanation": "Add Sales to Values a second time, then right-click and choose Show Values As > % of Grand Total. Each region now shows its share of total sales (e.g. North = 28%), perfect for a contribution analysis without extra formulas."
+    }
+  ],
+  "commonMistakes": [
+    "Building the PivotTable on a range with blank header cells or merged cells, which causes the field list to break",
+    "Forgetting to refresh (Data > Refresh) after the source data changes, leaving stale numbers in the report",
+    "Selecting only part of the data so new rows added later are not included; use an Excel Table (Ctrl+T) as the source instead",
+    "Leaving a field in the wrong area (e.g. a numeric ID dropped into Values gets summed instead of counted)",
+    "Having duplicate or inconsistent category names (e.g. 'North' vs 'north ') that split what should be one group"
+  ],
+  "practiceTips": [
+    "Convert your source range to a Table with Ctrl+T first so the PivotTable auto-expands when you add rows.",
+    "Double-click any value cell to drill through to the underlying rows that make up that number.",
+    "Use the Value Field Settings dialog to rename ugly labels like 'Sum of Sales' to 'Total Sales'.",
+    "Add Slicers (PivotTable Analyze > Insert Slicer) for clickable, interview-impressive filters."
+  ]
+}

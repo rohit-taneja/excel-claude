@@ -1,0 +1,53 @@
+{
+  "id": "data-validation",
+  "title": "Data Validation",
+  "order": 12,
+  "priority": "medium",
+  "category": "Data Quality",
+  "summary": "Data Validation restricts what users can type into a cell, enabling dropdown lists, number ranges, and date limits to keep data clean and consistent.",
+  "syntax": "Select cells > Data > Data Validation > choose Allow type (List, Whole number, Date) > set criteria",
+  "difficulty": "easy",
+  "icon": "BadgeCheck",
+  "jobUseCases": [
+    "Add a Department dropdown so staff pick from approved values instead of free typing",
+    "Restrict a Quantity column to whole numbers between 1 and 1000 on an order form",
+    "Force a Joining Date to fall on or after the company start date in HR records",
+    "Limit a text-comment field to 50 characters to fit a downstream system",
+    "Prevent duplicate invoice numbers from being entered using a formula rule"
+  ],
+  "examples": [
+    {
+      "title": "Dropdown list from typed values",
+      "formula": "Data > Data Validation > Allow: List > Source: North,South,East,West",
+      "explanation": "Select the Region cells and choose List, then type the options separated by commas. A dropdown arrow appears so users pick North, South, East, or West, preventing typos like 'Norht' that would break PivotTables."
+    },
+    {
+      "title": "Dropdown from a range",
+      "formula": "Data > Data Validation > Allow: List > Source: =$H$2:$H$10",
+      "explanation": "Point the Source at a range (or a named range / Table column) holding your master list of departments. The dropdown updates automatically as you maintain that list, which is cleaner than hard-coding values."
+    },
+    {
+      "title": "Restrict to a number range",
+      "formula": "Data > Data Validation > Allow: Whole number > between 1 and 1000",
+      "explanation": "Choose Whole number and set minimum 1, maximum 1000. Anyone entering 0, 5000, or text gets an error message, ensuring an order Quantity stays within valid limits."
+    },
+    {
+      "title": "Custom formula to block duplicates",
+      "formula": "=COUNTIF($A$2:$A$100,A2)=1  (Allow: Custom)",
+      "explanation": "Select the Invoice No range, choose Custom, and enter =COUNTIF($A$2:$A$100,A2)=1. The cell is only accepted when that value appears exactly once in the column, so duplicate invoice numbers are rejected on entry."
+    }
+  ],
+  "commonMistakes": [
+    "Expecting validation to clean existing data; it only blocks new entries, so paste-overs and prior bad values stay (use Data > Circle Invalid Data to find them)",
+    "Pasting into a validated cell, which can bypass or overwrite the rule entirely",
+    "Forgetting to lock references ($H$2:$H$10) so the source range shifts when copied down",
+    "Leaving 'Ignore blank' checked and wondering why empty cells are allowed",
+    "Not setting a clear Error Alert message, leaving users confused about why their entry was rejected"
+  ],
+  "practiceTips": [
+    "Base list dropdowns on a Table column so new options appear automatically without editing the rule.",
+    "Use the Input Message tab to show a helpful tooltip when the cell is selected.",
+    "Use Data > Circle Invalid Data to audit values that were entered or pasted before the rule existed.",
+    "For dependent dropdowns, combine Data Validation with the INDIRECT function on named ranges."
+  ]
+}

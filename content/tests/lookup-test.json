@@ -1,0 +1,20 @@
+{
+  "id": "lookup-test",
+  "title": "Lookup Test",
+  "description": "Find values across tables with XLOOKUP, VLOOKUP and INDEX + MATCH.",
+  "category": "mixed",
+  "difficulty": "medium",
+  "skills": ["xlookup", "vlookup", "index-match"],
+  "durationMinutes": 18,
+  "passingScore": 60,
+  "questionIds": [
+    "lookup-001",
+    "lookup-002",
+    "lookup-003",
+    "lookup-004",
+    "lookup-005",
+    "lookup-006",
+    "lookup-007",
+    "lookup-008"
+  ]
+}

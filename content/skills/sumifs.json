@@ -1,0 +1,52 @@
+{
+  "id": "sumifs",
+  "title": "SUMIFS",
+  "order": 2,
+  "priority": "high",
+  "category": "Core Formula",
+  "summary": "SUMIFS adds up numbers that meet one or more criteria across different columns. It is the go-to function for conditional totals in business reporting.",
+  "syntax": "=SUMIFS(sum_range, criteria_range1, criteria1, [criteria_range2, criteria2], ...)",
+  "difficulty": "easy",
+  "icon": "Sigma",
+  "jobUseCases": [
+    "Totaling sales revenue for a specific region and product category",
+    "Summing the salaries of all employees in a particular department and grade",
+    "Calculating total expenses within a given date range for budgeting",
+    "Adding up units sold by a specific sales rep in a chosen quarter",
+    "Computing total invoice amounts for a single client that are still unpaid"
+  ],
+  "examples": [
+    {
+      "title": "Sales for one region",
+      "formula": "=SUMIFS(C2:C100, A2:A100, \"North\")",
+      "explanation": "Adds every value in C2:C100 where the matching row in A2:A100 equals 'North'. The sum_range always comes first in SUMIFS."
+    },
+    {
+      "title": "Two conditions at once",
+      "formula": "=SUMIFS(D2:D100, A2:A100, \"North\", B2:B100, \"Laptop\")",
+      "explanation": "Totals sales in D2:D100 only where the region is 'North' AND the product is 'Laptop'. All criteria must be met for a row to be included."
+    },
+    {
+      "title": "Date range with operators",
+      "formula": "=SUMIFS(E2:E100, F2:F100, \">=\"&DATE(2026,1,1), F2:F100, \"<=\"&DATE(2026,3,31))",
+      "explanation": "Sums amounts where the date in F2:F100 falls in Q1 2026. Comparison operators are joined to the value with the & ampersand."
+    },
+    {
+      "title": "Criteria from a cell reference",
+      "formula": "=SUMIFS(C2:C100, A2:A100, H2)",
+      "explanation": "Sums sales for whichever region name is typed into H2, so the report updates automatically when the input cell changes."
+    }
+  ],
+  "commonMistakes": [
+    "Putting the sum_range last like in SUMIF; in SUMIFS the sum_range must be the first argument",
+    "Mismatched range sizes, e.g. sum_range covering 100 rows but a criteria_range covering 99, which causes a #VALUE! error",
+    "Forgetting to concatenate operators with &, writing \">=H2\" instead of \">=\"&H2",
+    "Expecting OR behavior when SUMIFS only applies AND logic across all criteria",
+    "Leaving criteria text case-sensitive expectations; SUMIFS ignores case (North and north are treated the same)"
+  ],
+  "practiceTips": [
+    "Always keep all ranges the same length and on the same rows to avoid alignment errors",
+    "Use wildcards like \"*Pvt*\" to match partial text in criteria",
+    "For OR conditions, add multiple SUMIFS together or use a helper column"
+  ]
+}

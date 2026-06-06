@@ -1,0 +1,10 @@
+allowBuilds:
+  esbuild: true
+  msw: set this to true or false
+  sharp: true
+  unrs-resolver: true
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+  - "@tailwindcss/oxide"
+  - esbuild

@@ -1,0 +1,52 @@
+{
+  "id": "xlookup",
+  "title": "XLOOKUP",
+  "order": 4,
+  "priority": "high",
+  "category": "Lookup",
+  "summary": "XLOOKUP is the modern replacement for VLOOKUP and HLOOKUP. It searches a range for a value and returns a corresponding result, looking in any direction with a built-in not-found handler.",
+  "syntax": "=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found], [match_mode], [search_mode])",
+  "difficulty": "medium",
+  "icon": "Search",
+  "jobUseCases": [
+    "Looking up an employee's department from an HR master sheet by their ID",
+    "Pulling a product price into an invoice based on the product code",
+    "Returning a customer's region from a lookup table for a sales report",
+    "Finding the latest status of an order by searching from the bottom up",
+    "Matching candidates to interview scores stored in a separate sheet"
+  ],
+  "examples": [
+    {
+      "title": "Basic lookup",
+      "formula": "=XLOOKUP(\"E102\", A2:A100, C2:C100)",
+      "explanation": "Searches employee ID 'E102' in A2:A100 and returns the matching value from C2:C100. The lookup and return arrays are separate, so columns can be in any order."
+    },
+    {
+      "title": "Handling not found gracefully",
+      "formula": "=XLOOKUP(G2, A2:A100, B2:B100, \"Not Found\")",
+      "explanation": "Returns the name for the ID in G2, but if no match exists it shows 'Not Found' instead of a #N/A error. The if_not_found argument removes the need for IFERROR."
+    },
+    {
+      "title": "Approximate match for tax brackets",
+      "formula": "=XLOOKUP(F2, A2:A10, B2:B10, , -1)",
+      "explanation": "match_mode -1 finds the largest value less than or equal to the income in F2, ideal for tiered rates. Pass an empty if_not_found by leaving the slot blank."
+    },
+    {
+      "title": "Search from the bottom for latest entry",
+      "formula": "=XLOOKUP(\"Amit\", D2:D100, E2:E100, \"No record\", 0, -1)",
+      "explanation": "search_mode -1 scans from the last row upward, returning Amit's most recent status when the same name appears multiple times."
+    }
+  ],
+  "commonMistakes": [
+    "Swapping lookup_array and return_array, which returns the wrong column of data",
+    "Using lookup_array and return_array of different lengths, causing a #VALUE! error",
+    "Assuming approximate match by default; XLOOKUP defaults to exact match (match_mode 0)",
+    "Skipping the if_not_found slot incorrectly when also setting match_mode, which shifts arguments",
+    "Relying on XLOOKUP in older Excel versions where it is unavailable (it requires Microsoft 365 or Excel 2021)"
+  ],
+  "practiceTips": [
+    "Prefer XLOOKUP over VLOOKUP for new work; it is more flexible and less fragile",
+    "Use the if_not_found argument instead of wrapping the whole formula in IFERROR",
+    "Return an entire row or column by selecting a multi-column return_array (spill)"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "text-functions",
+  "title": "LEFT / RIGHT / MID",
+  "order": 9,
+  "priority": "medium",
+  "category": "Data Cleaning",
+  "summary": "LEFT, RIGHT, and MID extract portions of text from a string. LEFT pulls characters from the start, RIGHT from the end, and MID from any position in between.",
+  "syntax": "=LEFT(text, num_chars) | =RIGHT(text, num_chars) | =MID(text, start_num, num_chars)",
+  "difficulty": "medium",
+  "icon": "Type",
+  "jobUseCases": [
+    "Extracting a region code from the first two characters of a product ID",
+    "Pulling the last four digits of an account number for masking",
+    "Splitting a fixed-format employee code into department and serial parts",
+    "Getting the file extension or prefix from a list of document names",
+    "Separating area codes from phone numbers stored in a single column"
+  ],
+  "examples": [
+    {
+      "title": "LEFT to get a prefix",
+      "formula": "=LEFT(\"IN-2026-0481\", 2)",
+      "explanation": "Returns 'IN', the first 2 characters of the string. LEFT counts from the start of the text for the number of characters you specify."
+    },
+    {
+      "title": "RIGHT to get a suffix",
+      "formula": "=RIGHT(A2, 4)",
+      "explanation": "Returns the last 4 characters of the value in A2, for example the serial '0481' from an order code or the last 4 digits of an account number."
+    },
+    {
+      "title": "MID to extract the middle",
+      "formula": "=MID(\"IN-2026-0481\", 4, 4)",
+      "explanation": "Starts at position 4 and pulls 4 characters, returning '2026'. MID is ideal for grabbing a year or segment from a fixed-format code."
+    },
+    {
+      "title": "MID with FIND for variable positions",
+      "formula": "=MID(A2, FIND(\"-\", A2)+1, 4)",
+      "explanation": "Uses FIND to locate the dash, then MID extracts the 4 characters after it. Combining with FIND or SEARCH handles strings where the delimiter position varies."
+    }
+  ],
+  "commonMistakes": [
+    "Using 0 or a negative num_chars, which returns blank or a #VALUE! error",
+    "Off-by-one errors in MID; start_num is 1-based, so the first character is position 1, not 0",
+    "Expecting numeric results; these functions always return text, so wrap in VALUE to do math",
+    "Hardcoding positions when the format varies; use FIND or SEARCH to locate delimiters dynamically",
+    "Counting spaces or hidden characters by mistake, which shifts the extracted segment"
+  ],
+  "practiceTips": [
+    "Combine LEFT, RIGHT, and MID with FIND or SEARCH for delimiters that move around",
+    "Use LEN to calculate dynamic lengths, e.g. RIGHT(A2, LEN(A2)-FIND(\"-\", A2))",
+    "For modern Excel, consider TEXTSPLIT or Text to Columns when splitting many fields at once"
+  ]
+}

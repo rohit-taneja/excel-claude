@@ -1,0 +1,147 @@
+[
+  {
+    "id": "cleaning-001",
+    "title": "Trim extra spaces",
+    "skills": ["trim"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "Customer names imported from another system have extra spaces. Write a formula in B2 that removes the leading, trailing and double spaces from the name in A2.",
+    "dataset": {
+      "headers": ["RawName", "CleanName"],
+      "rows": [
+        ["  Amit  Sharma ", ""],
+        ["Priya   Nair", ""],
+        [" Rahul Verma", ""],
+        ["Sara  Khan  ", ""]
+      ],
+      "note": "Headers in row 1; RawName is column A, CleanName is column B."
+    },
+    "expectedConcepts": ["TRIM"],
+    "acceptedAnswers": [
+      "=TRIM(A2)"
+    ],
+    "expectedOutput": "Amit Sharma",
+    "explanation": "TRIM removes spaces from the start and end of text and collapses any run of internal spaces down to a single space. \"  Amit  Sharma \" becomes \"Amit Sharma\". TRIM does NOT remove non-breaking spaces (CHAR(160)) from web copies.",
+    "hint": "There is a single function whose only job is to strip excess spaces.",
+    "points": 10
+  },
+  {
+    "id": "cleaning-002",
+    "title": "TRIM output prediction",
+    "skills": ["trim"],
+    "type": "output_prediction",
+    "difficulty": "easy",
+    "prompt": "Cell A2 contains the text \"   Sales   Report   \" (with leading, trailing and multiple internal spaces). What does =TRIM(A2) return?",
+    "dataset": {
+      "headers": ["RawText", "Result"],
+      "rows": [
+        ["   Sales   Report   ", ""]
+      ],
+      "note": "Headers in row 1; the text is in A2."
+    },
+    "correctAnswer": "Sales Report",
+    "expectedOutput": "Sales Report",
+    "explanation": "TRIM strips all leading and trailing spaces and reduces every internal gap to one space, so the result is exactly \"Sales Report\" with a single space between the two words.",
+    "hint": "Internal runs of spaces collapse to one; edges are removed entirely.",
+    "points": 10
+  },
+  {
+    "id": "cleaning-003",
+    "title": "Fix the cleaning formula",
+    "skills": ["trim"],
+    "type": "fix_formula",
+    "difficulty": "medium",
+    "prompt": "This formula was meant to remove extra spaces from the name in A2 before comparing it elsewhere, but it uses the wrong function and just measures length instead. Fix it so it returns the cleaned text.",
+    "dataset": {
+      "headers": ["RawName", "CleanName"],
+      "rows": [
+        ["  Neha  Gupta ", ""],
+        ["Amit Roy ", ""]
+      ],
+      "note": "Headers in row 1; RawName is column A, CleanName is column B."
+    },
+    "brokenFormula": "=LEN(A2)",
+    "expectedConcepts": ["TRIM"],
+    "acceptedAnswers": [
+      "=TRIM(A2)"
+    ],
+    "expectedOutput": "Neha Gupta",
+    "explanation": "LEN returns the number of characters, not cleaned text. To strip the extra spaces you need TRIM(A2), which returns \"Neha Gupta\". Use LEN only when you actually want a count.",
+    "hint": "LEN counts characters. Which function actually removes the spaces?",
+    "points": 10
+  },
+  {
+    "id": "cleaning-004",
+    "title": "Build an email address",
+    "skills": ["text-functions"],
+    "type": "formula_input",
+    "difficulty": "medium",
+    "prompt": "Create a work email in C2 by joining the username in A2, an \"@\" sign, and the domain in B2 (for example \"amit\" + \"@\" + \"tern.com\" gives \"amit@tern.com\").",
+    "dataset": {
+      "headers": ["Username", "Domain", "Email"],
+      "rows": [
+        ["amit", "tern.com", ""],
+        ["priya", "tern.com", ""],
+        ["rahul", "tern.com", ""],
+        ["sara", "tern.com", ""]
+      ],
+      "note": "Headers in row 1; Username is column A, Domain B, Email C."
+    },
+    "expectedConcepts": ["CONCAT"],
+    "acceptedAnswers": [
+      "=A2&\"@\"&B2",
+      "=CONCAT(A2,\"@\",B2)",
+      "=CONCATENATE(A2,\"@\",B2)",
+      "=TEXTJOIN(\"@\",TRUE,A2,B2)"
+    ],
+    "expectedOutput": "amit@tern.com",
+    "explanation": "You can join text with the & operator or with CONCAT/CONCATENATE. =A2&\"@\"&B2 stitches the username, a literal @ in quotes, and the domain into \"amit@tern.com\". TEXTJOIN with \"@\" as the delimiter also works for exactly two parts.",
+    "hint": "The & operator (or CONCAT) glues text pieces together; put the literal @ in quotes.",
+    "points": 10
+  },
+  {
+    "id": "cleaning-005",
+    "title": "Extract an area code",
+    "skills": ["text-functions"],
+    "type": "mcq",
+    "difficulty": "hard",
+    "prompt": "Phone numbers in column A look like \"080-12345678\". Which formula extracts just the 3-digit area code (\"080\") before the dash from A2?",
+    "options": [
+      "=LEFT(A2, 3)",
+      "=RIGHT(A2, 3)",
+      "=MID(A2, 3, 1)",
+      "=LEFT(A2, 8)"
+    ],
+    "correctAnswer": "=LEFT(A2, 3)",
+    "explanation": "LEFT(text, num_chars) returns characters from the start of the string. Since the area code is the first 3 characters, =LEFT(A2, 3) returns \"080\". RIGHT pulls from the end, and MID(A2,3,1) would grab a single middle character.",
+    "hint": "The area code is at the beginning of the string. Which function reads from the left?",
+    "points": 10
+  },
+  {
+    "id": "cleaning-006",
+    "title": "Clean and standardise a name",
+    "skills": ["text-functions"],
+    "type": "multi_function_formula",
+    "difficulty": "hard",
+    "prompt": "Names in A2 have stray spaces and inconsistent capitalisation, e.g. \"  amit  SHARMA \". Write a formula in B2 that removes the extra spaces AND converts the result to proper title case, giving \"Amit Sharma\".",
+    "dataset": {
+      "headers": ["RawName", "CleanName"],
+      "rows": [
+        ["  amit  SHARMA ", ""],
+        ["PRIYA nair ", ""],
+        [" rahul VERMA", ""],
+        ["sara   khan ", ""]
+      ],
+      "note": "Headers in row 1; RawName is column A, CleanName is column B."
+    },
+    "expectedConcepts": ["PROPER", "TRIM"],
+    "acceptedAnswers": [
+      "=PROPER(TRIM(A2))",
+      "=TRIM(PROPER(A2))"
+    ],
+    "expectedOutput": "Amit Sharma",
+    "explanation": "Nest the functions so each does one job: TRIM(A2) removes the extra spaces, then PROPER() capitalises the first letter of each word. =PROPER(TRIM(A2)) turns \"  amit  SHARMA \" into \"Amit Sharma\". The order does not matter here because neither affects the other's work.",
+    "hint": "You need two functions: one to fix spacing and one to fix capitalisation. Nest them.",
+    "points": 10
+  }
+]

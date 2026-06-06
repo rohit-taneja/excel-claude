@@ -1,0 +1,36 @@
+{
+  "id": "job-interview-test",
+  "title": "Final Excel Job Readiness Test",
+  "description": "A broad, interview-style mix across formulas, lookups, cleaning, dates and PivotTables.",
+  "category": "job-simulation",
+  "difficulty": "medium",
+  "skills": [
+    "if",
+    "sumifs",
+    "countifs",
+    "xlookup",
+    "vlookup",
+    "iferror",
+    "trim",
+    "text-functions",
+    "pivot-tables",
+    "datedif",
+    "conditional-formatting"
+  ],
+  "durationMinutes": 25,
+  "passingScore": 70,
+  "questionIds": [
+    "if-002",
+    "sumifs-002",
+    "countifs-005",
+    "lookup-001",
+    "lookup-006",
+    "cleaning-005",
+    "combo-001",
+    "combo-002",
+    "combo-008",
+    "pivot-002",
+    "misc-009",
+    "misc-003"
+  ]
+}

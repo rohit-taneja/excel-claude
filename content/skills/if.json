@@ -1,0 +1,52 @@
+{
+  "id": "if",
+  "title": "IF",
+  "order": 1,
+  "priority": "high",
+  "category": "Core Formula",
+  "summary": "The IF function returns one value when a condition is TRUE and another when it is FALSE. It is the foundation of decision-making logic in Excel.",
+  "syntax": "=IF(condition, value_if_true, value_if_false)",
+  "difficulty": "easy",
+  "icon": "GitBranch",
+  "jobUseCases": [
+    "Flagging sales reps as 'Target Met' or 'Below Target' based on monthly revenue",
+    "Calculating bonus eligibility for employees who exceed a performance threshold",
+    "Categorizing invoices as 'Overdue' or 'On Time' by comparing due dates to today",
+    "Assigning pass/fail grades to candidates in a recruitment assessment tracker",
+    "Applying a discount only when an order value crosses a minimum amount"
+  ],
+  "examples": [
+    {
+      "title": "Simple pass/fail check",
+      "formula": "=IF(B2>=40, \"Pass\", \"Fail\")",
+      "explanation": "If Amit's score in B2 is 40 or higher, the cell shows 'Pass'; otherwise it shows 'Fail'. Text values must be wrapped in double quotes."
+    },
+    {
+      "title": "Target achievement flag",
+      "formula": "=IF(C2>=100000, \"Target Met\", \"Below Target\")",
+      "explanation": "Compares Priya's monthly sales in C2 against a 100,000 target. Returns 'Target Met' when sales reach or exceed the goal."
+    },
+    {
+      "title": "Nested IF for grade bands",
+      "formula": "=IF(D2>=90, \"A\", IF(D2>=75, \"B\", IF(D2>=60, \"C\", \"D\")))",
+      "explanation": "Checks Rahul's score against multiple thresholds in order. The first condition that is TRUE wins, so ranges are evaluated from highest to lowest."
+    },
+    {
+      "title": "Returning a calculation",
+      "formula": "=IF(E2>50000, E2*0.1, 0)",
+      "explanation": "If Sara's order value in E2 exceeds 50,000, it returns a 10% incentive; otherwise it returns 0. value_if_true and value_if_false can be formulas, not just text."
+    }
+  ],
+  "commonMistakes": [
+    "Forgetting double quotes around text results, e.g. writing Pass instead of \"Pass\", which causes a #NAME? error",
+    "Putting quotes around numbers like \"100\" so they are treated as text and break later calculations",
+    "Mismatched or missing parentheses when nesting multiple IF statements",
+    "Ordering nested IF conditions incorrectly (e.g. checking >=60 before >=90), which makes higher bands unreachable",
+    "Using a comma vs semicolon as the argument separator depending on regional settings"
+  ],
+  "practiceTips": [
+    "Build complex logic step by step: get a single IF working before nesting more",
+    "For more than 3-4 conditions, switch to IFS or a lookup table to keep formulas readable",
+    "Use cell references for thresholds instead of hardcoding numbers so they are easy to update"
+  ]
+}

@@ -1,0 +1,269 @@
+[
+  {
+    "id": "combo-001",
+    "title": "Flag high-volume regions with IF and SUMIFS",
+    "skills": ["if", "sumifs"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "In cell E2, write one formula that totals the Sales (column C) for the region named in D2 (\"North\") AND only for the \"Closed\" status (column B), then returns the text \"Target Met\" if that total is at least 100000, otherwise \"Below Target\".",
+    "dataset": {
+      "headers": ["Rep", "Status", "Sales", "Region"],
+      "rows": [
+        ["Amit", "Closed", 60000, "North"],
+        ["Priya", "Open", 45000, "North"],
+        ["Rahul", "Closed", 50000, "North"],
+        ["Sara", "Closed", 70000, "South"]
+      ],
+      "note": "D2 contains the region to test, \"North\". E2 holds your formula."
+    },
+    "expectedConcepts": ["IF", "SUMIFS"],
+    "acceptedAnswers": [
+      "=IF(SUMIFS(C2:C5,D2:D5,\"North\",B2:B5,\"Closed\")>=100000,\"Target Met\",\"Below Target\")",
+      "=IF(SUMIFS(C2:C5,D2:D5,D2,B2:B5,\"Closed\")>=100000,\"Target Met\",\"Below Target\")",
+      "=IF(SUMIFS(C:C,D:D,\"North\",B:B,\"Closed\")>=100000,\"Target Met\",\"Below Target\")"
+    ],
+    "explanation": "SUMIFS adds C2:C5 only where the region equals \"North\" and the status equals \"Closed\" (60000 + 50000 = 110000). IF then compares that total to 100000 and returns the matching text. Wrapping an aggregate in IF is the standard way to turn a number into a business decision.",
+    "hint": "SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2), then wrap the whole thing in IF(... >= 100000, \"Target Met\", \"Below Target\").",
+    "points": 10
+  },
+  {
+    "id": "combo-002",
+    "title": "Safe lookup with IFERROR and XLOOKUP",
+    "skills": ["iferror", "xlookup"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "In cell E2, look up the Department (column B) for the Employee ID stored in D2 using XLOOKUP. If the ID is not found, return the text \"Not Found\" instead of an error.",
+    "dataset": {
+      "headers": ["EmpID", "Department", "Salary", "Lookup ID"],
+      "rows": [
+        ["E101", "Finance", 55000, "E999"],
+        ["E102", "HR", 48000, ""],
+        ["E103", "Operations", 52000, ""],
+        ["E104", "Sales", 60000, ""]
+      ],
+      "note": "D2 holds the Employee ID to find (\"E999\", which does not exist). E2 holds your formula."
+    },
+    "expectedConcepts": ["IFERROR", "XLOOKUP"],
+    "acceptedAnswers": [
+      "=IFERROR(XLOOKUP(D2,A2:A5,B2:B5),\"Not Found\")",
+      "=IFERROR(XLOOKUP(D2,A:A,B:B),\"Not Found\")"
+    ],
+    "explanation": "XLOOKUP searches A2:A5 for the value in D2 and returns the matching Department from B2:B5. Because \"E999\" is missing, XLOOKUP raises #N/A, so IFERROR catches it and returns \"Not Found\". This pattern keeps reports clean when some lookup values are absent.",
+    "hint": "Structure: =IFERROR(XLOOKUP(lookup_value, lookup_array, return_array), \"Not Found\").",
+    "points": 10
+  },
+  {
+    "id": "combo-003",
+    "title": "Clean keys with TRIM before XLOOKUP",
+    "skills": ["trim", "xlookup"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "The lookup value in D2 was pasted from another system and contains stray leading/trailing spaces. In cell E2, use TRIM to clean D2 and then XLOOKUP that cleaned name against the Name column (A) to return the matching City (column C).",
+    "dataset": {
+      "headers": ["Name", "Role", "City", "Lookup Name"],
+      "rows": [
+        ["Amit", "Analyst", "Mumbai", "  Priya  "],
+        ["Priya", "Manager", "Delhi", ""],
+        ["Rahul", "Lead", "Pune", ""],
+        ["Sara", "Director", "Chennai", ""]
+      ],
+      "note": "D2 contains \"  Priya  \" with extra spaces. The Name column has clean values. E2 holds your formula."
+    },
+    "expectedConcepts": ["TRIM", "XLOOKUP"],
+    "acceptedAnswers": [
+      "=XLOOKUP(TRIM(D2),A2:A5,C2:C5)",
+      "=XLOOKUP(TRIM(D2),A:A,C:C)"
+    ],
+    "explanation": "TRIM removes the leading and trailing spaces from \"  Priya  \", turning it into \"Priya\" so it matches the clean key in column A. XLOOKUP then returns the City \"Delhi\". Cleaning lookup keys with TRIM prevents the frustrating case where a value looks correct but never matches.",
+    "hint": "Wrap D2 in TRIM first, then use that as the lookup_value: =XLOOKUP(TRIM(D2), A2:A5, C2:C5).",
+    "points": 10
+  },
+  {
+    "id": "combo-004",
+    "title": "Robust lookup with INDEX, MATCH and IFERROR",
+    "skills": ["index-match", "iferror"],
+    "type": "multi_function_formula",
+    "difficulty": "hard",
+    "prompt": "In cell E2, use INDEX and MATCH to return the Salary (column C) for the Employee Name in D2. If the name is not found, return 0 instead of an error.",
+    "dataset": {
+      "headers": ["Name", "Department", "Salary", "Lookup Name"],
+      "rows": [
+        ["Amit", "Finance", 55000, "Karan"],
+        ["Priya", "HR", 48000, ""],
+        ["Rahul", "Operations", 52000, ""],
+        ["Sara", "Sales", 60000, ""]
+      ],
+      "note": "D2 holds \"Karan\", who is not in the list. E2 holds your formula."
+    },
+    "expectedConcepts": ["INDEX", "MATCH", "IFERROR"],
+    "acceptedAnswers": [
+      "=IFERROR(INDEX(C2:C5,MATCH(D2,A2:A5,0)),0)",
+      "=IFERROR(INDEX(C2:C5,MATCH(D2,A2:A5,0)),\"0\")",
+      "=IFERROR(INDEX(C:C,MATCH(D2,A:A,0)),0)"
+    ],
+    "explanation": "MATCH finds the row position of D2 within A2:A5 using an exact match (0). INDEX then returns the Salary at that row from C2:C5. Since \"Karan\" is absent, MATCH returns #N/A, so IFERROR substitutes 0. INDEX/MATCH works regardless of column order, and IFERROR makes the result safe to sum or chart.",
+    "hint": "INDEX(return_range, MATCH(lookup_value, lookup_range, 0)), all wrapped in IFERROR(..., 0).",
+    "points": 10
+  },
+  {
+    "id": "combo-005",
+    "title": "Dynamic distinct list with FILTER, UNIQUE and SORT",
+    "skills": ["filter", "sort", "unique"],
+    "type": "multi_function_formula",
+    "difficulty": "hard",
+    "prompt": "In cell E2, write one spill formula that returns a sorted, alphabetical list of the DISTINCT Region names (column B) but only for rows where Status (column C) is \"Active\".",
+    "dataset": {
+      "headers": ["Rep", "Region", "Status"],
+      "rows": [
+        ["Amit", "North", "Active"],
+        ["Priya", "South", "Inactive"],
+        ["Rahul", "North", "Active"],
+        ["Sara", "East", "Active"],
+        ["Karan", "East", "Active"]
+      ],
+      "note": "E2 holds your single spill formula. Expected spill: East, North."
+    },
+    "expectedConcepts": ["FILTER", "SORT", "UNIQUE"],
+    "acceptedAnswers": [
+      "=SORT(UNIQUE(FILTER(B2:B6,C2:C6=\"Active\")))",
+      "=SORT(UNIQUE(FILTER(B2:B6,C2:C6=\"Active\",\"\")))"
+    ],
+    "explanation": "FILTER keeps only the regions whose status is \"Active\" (North, North, East, East). UNIQUE collapses those to the distinct values (North, East). SORT then orders them alphabetically, spilling East, North. Nesting these three dynamic-array functions builds a live, self-updating distinct list with no helper columns.",
+    "hint": "Work inside-out: FILTER the regions by Status=\"Active\", wrap in UNIQUE, then wrap in SORT.",
+    "points": 10
+  },
+  {
+    "id": "combo-006",
+    "title": "Tenure check with DATEDIF and IF",
+    "skills": ["datedif", "if"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "In cell D2, calculate the number of complete YEARS between the Hire Date (B2) and today using DATEDIF, then return \"Eligible\" if the employee has 5 or more full years, otherwise \"Not Eligible\".",
+    "dataset": {
+      "headers": ["Name", "Hire Date", "Department", "Result"],
+      "rows": [
+        ["Amit", "2018-04-01", "Finance", ""],
+        ["Priya", "2023-09-15", "HR", ""],
+        ["Rahul", "2015-01-20", "Operations", ""],
+        ["Sara", "2022-06-30", "Sales", ""]
+      ],
+      "note": "B2 holds the hire date. Use TODAY() for the current date. D2 holds your formula."
+    },
+    "expectedConcepts": ["DATEDIF", "IF"],
+    "acceptedAnswers": [
+      "=IF(DATEDIF(B2,TODAY(),\"Y\")>=5,\"Eligible\",\"Not Eligible\")",
+      "=IF(DATEDIF(B2,TODAY(),\"y\")>=5,\"Eligible\",\"Not Eligible\")"
+    ],
+    "explanation": "DATEDIF(B2, TODAY(), \"Y\") returns the number of complete years between the hire date and today. IF then compares that count to 5 and returns the eligibility label. The \"Y\" unit counts only whole years, so someone hired 4 years and 11 months ago still shows 4.",
+    "hint": "Use DATEDIF(start, end, \"Y\") for full years, then wrap it in IF(... >= 5, \"Eligible\", \"Not Eligible\").",
+    "points": 10
+  },
+  {
+    "id": "combo-007",
+    "title": "Deadline status with NETWORKDAYS and IF",
+    "skills": ["networkdays", "if"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "In cell D2, count the working days (excluding weekends) between the Start Date (B2) and End Date (C2) with NETWORKDAYS, then return \"On Track\" if that count is 10 or fewer working days, otherwise \"Delayed\".",
+    "dataset": {
+      "headers": ["Task", "Start Date", "End Date", "Result"],
+      "rows": [
+        ["Audit", "2026-06-01", "2026-06-12", ""],
+        ["Onboarding", "2026-06-01", "2026-06-30", ""],
+        ["Report", "2026-06-15", "2026-06-19", ""],
+        ["Review", "2026-06-01", "2026-06-05", ""]
+      ],
+      "note": "B2 is the start date, C2 the end date. NETWORKDAYS counts both endpoints, excluding Saturdays and Sundays. D2 holds your formula."
+    },
+    "expectedConcepts": ["NETWORKDAYS", "IF"],
+    "acceptedAnswers": [
+      "=IF(NETWORKDAYS(B2,C2)<=10,\"On Track\",\"Delayed\")",
+      "=IF(NETWORKDAYS(B2,C2)>10,\"Delayed\",\"On Track\")"
+    ],
+    "explanation": "NETWORKDAYS(B2, C2) returns the count of weekdays from the start to the end date, automatically skipping Saturdays and Sundays. IF then labels the task: 10 or fewer working days is \"On Track\", more is \"Delayed\". NETWORKDAYS is the standard way to measure business duration rather than raw calendar days.",
+    "hint": "NETWORKDAYS(start_date, end_date) gives working days; compare with <= 10 inside an IF.",
+    "points": 10
+  },
+  {
+    "id": "combo-008",
+    "title": "Performance label with COUNTIFS and IF",
+    "skills": ["countifs", "if"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "In cell E2, count how many deals the rep in D2 (\"Amit\") has with a status of \"Won\" using COUNTIFS over Rep (column A) and Status (column B), then return \"Top Performer\" if that count is at least 3, otherwise \"Keep Going\".",
+    "dataset": {
+      "headers": ["Rep", "Status", "Deal Value", "Lookup Rep"],
+      "rows": [
+        ["Amit", "Won", 20000, "Amit"],
+        ["Amit", "Won", 15000, ""],
+        ["Amit", "Lost", 10000, ""],
+        ["Amit", "Won", 18000, ""],
+        ["Priya", "Won", 22000, ""]
+      ],
+      "note": "D2 holds the rep name to evaluate (\"Amit\"). E2 holds your formula."
+    },
+    "expectedConcepts": ["COUNTIFS", "IF"],
+    "acceptedAnswers": [
+      "=IF(COUNTIFS(A2:A6,\"Amit\",B2:B6,\"Won\")>=3,\"Top Performer\",\"Keep Going\")",
+      "=IF(COUNTIFS(A2:A6,D2,B2:B6,\"Won\")>=3,\"Top Performer\",\"Keep Going\")",
+      "=IF(COUNTIFS(A:A,\"Amit\",B:B,\"Won\")>=3,\"Top Performer\",\"Keep Going\")"
+    ],
+    "explanation": "COUNTIFS counts rows where Rep is \"Amit\" AND Status is \"Won\" (3 such rows). IF then compares that count to 3 and returns the performance label. COUNTIFS applies all conditions together, so only deals meeting every criterion are counted.",
+    "hint": "COUNTIFS(range1, crit1, range2, crit2) returns a count; wrap it in IF(... >= 3, \"Top Performer\", \"Keep Going\").",
+    "points": 10
+  },
+  {
+    "id": "combo-009",
+    "title": "Extract a code with text functions, then XLOOKUP",
+    "skills": ["text-functions", "xlookup"],
+    "type": "multi_function_formula",
+    "difficulty": "hard",
+    "prompt": "Each SKU in D2 looks like \"PRD-1001-XL\". In cell E2, extract just the 4-digit product code in the middle (characters 5 to 8) using MID, then XLOOKUP that code against the Code column (A) to return the Product Name (column B).",
+    "dataset": {
+      "headers": ["Code", "Product", "Price", "SKU"],
+      "rows": [
+        ["1001", "T-Shirt", 499, "PRD-1001-XL"],
+        ["1002", "Cap", 299, ""],
+        ["1003", "Hoodie", 999, ""],
+        ["1004", "Socks", 199, ""]
+      ],
+      "note": "D2 holds the SKU \"PRD-1001-XL\". The Code column stores plain codes like \"1001\". E2 holds your formula."
+    },
+    "expectedConcepts": ["MID", "XLOOKUP"],
+    "acceptedAnswers": [
+      "=XLOOKUP(MID(D2,5,4),A2:A5,B2:B5)",
+      "=XLOOKUP(MID(D2,5,4),A:A,B:B)",
+      "=XLOOKUP(VALUE(MID(D2,5,4)),A2:A5,B2:B5)"
+    ],
+    "explanation": "MID(D2, 5, 4) pulls 4 characters starting at position 5 from \"PRD-1001-XL\", giving \"1001\". XLOOKUP then finds \"1001\" in the Code column and returns \"T-Shirt\". Combining text extraction (LEFT/RIGHT/MID) with a lookup is a common way to map messy IDs to clean reference data.",
+    "hint": "MID(text, start_num, num_chars) extracts the middle code; feed it as the lookup_value to XLOOKUP.",
+    "points": 10
+  },
+  {
+    "id": "combo-010",
+    "title": "Classic safe lookup with VLOOKUP and IFERROR",
+    "skills": ["vlookup", "iferror"],
+    "type": "multi_function_formula",
+    "difficulty": "medium",
+    "prompt": "In cell E2, use VLOOKUP to find the Price (column C, the 3rd column of A2:C5) for the Product Code in D2. If the code is not found, return the text \"Check Code\" instead of #N/A.",
+    "dataset": {
+      "headers": ["Code", "Product", "Price", "Lookup Code"],
+      "rows": [
+        ["P01", "Mouse", 799, "P09"],
+        ["P02", "Keyboard", 1299, ""],
+        ["P03", "Monitor", 8999, ""],
+        ["P04", "Webcam", 2499, ""]
+      ],
+      "note": "D2 holds \"P09\", which is not in the table. The lookup table is A2:C5. E2 holds your formula."
+    },
+    "expectedConcepts": ["VLOOKUP", "IFERROR"],
+    "acceptedAnswers": [
+      "=IFERROR(VLOOKUP(D2,A2:C5,3,FALSE),\"Check Code\")",
+      "=IFERROR(VLOOKUP(D2,A2:C5,3,0),\"Check Code\")",
+      "=IFERROR(VLOOKUP(D2,A:C,3,FALSE),\"Check Code\")"
+    ],
+    "explanation": "VLOOKUP searches the first column of A2:C5 for D2 and returns the value from the 3rd column (Price), using FALSE for an exact match. Because \"P09\" is missing, VLOOKUP returns #N/A, which IFERROR replaces with \"Check Code\". Always pair VLOOKUP with IFERROR and use FALSE/0 for exact-match lookups.",
+    "hint": "VLOOKUP(lookup_value, table_array, col_index, FALSE); wrap it in IFERROR(..., \"Check Code\").",
+    "points": 10
+  }
+]

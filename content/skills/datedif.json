@@ -1,0 +1,53 @@
+{
+  "id": "datedif",
+  "title": "DATEDIF",
+  "order": 13,
+  "priority": "medium",
+  "category": "Date & Time",
+  "summary": "DATEDIF calculates the difference between two dates in complete years, months, or days, which makes it ideal for ages, tenure, and durations.",
+  "syntax": "=DATEDIF(start_date, end_date, \"unit\")",
+  "difficulty": "medium",
+  "icon": "CalendarDays",
+  "jobUseCases": [
+    "Calculate employee tenure in years for long-service awards in HR",
+    "Work out a customer's age in completed years from their date of birth",
+    "Measure how many full months a project has been running for a status report",
+    "Compute days outstanding on an unpaid invoice for collections",
+    "Express tenure as 'X years and Y months' for an offer or appraisal letter"
+  ],
+  "examples": [
+    {
+      "title": "Full years of service",
+      "formula": "=DATEDIF(B2, TODAY(), \"Y\")",
+      "explanation": "If Amit joined on 15-Mar-2019 (in B2), this returns the number of completed years between that date and today, e.g. 7. The \"Y\" unit counts only whole years, ignoring leftover months and days."
+    },
+    {
+      "title": "Whole months between dates",
+      "formula": "=DATEDIF(B2, C2, \"M\")",
+      "explanation": "With a project start in B2 and end in C2, \"M\" returns the count of complete months between them. A span of 2-Jan to 28-Feb returns 1, because the second full month is not yet complete."
+    },
+    {
+      "title": "Years plus leftover months (tenure text)",
+      "formula": "=DATEDIF(B2,TODAY(),\"Y\")&\" yrs \"&DATEDIF(B2,TODAY(),\"YM\")&\" mths\"",
+      "explanation": "The \"YM\" unit gives the months remaining after subtracting whole years. Combined with \"Y\", this builds a readable string like '7 yrs 3 mths' for Priya's service record."
+    },
+    {
+      "title": "Days outstanding on an invoice",
+      "formula": "=DATEDIF(B2, TODAY(), \"D\")",
+      "explanation": "With the invoice date in B2, \"D\" returns the total number of days elapsed until today, e.g. 42. This is a quick aging metric (note: for net-of-days you can also just use TODAY()-B2)."
+    }
+  ],
+  "commonMistakes": [
+    "Putting the end_date before the start_date, which causes a #NUM! error since DATEDIF needs start <= end",
+    "Using a unit other than the six valid codes (\"Y\",\"M\",\"D\",\"YM\",\"YD\",\"MD\"), which returns #NUM!",
+    "Confusing \"YM\" (months after whole years) with \"M\" (total months) and getting unexpectedly large or small results",
+    "Feeding text dates like \"15/03/2019\" in quotes instead of real date values, causing #VALUE! errors",
+    "Relying on the documented but quirky \"MD\" unit, which can return wrong results across month boundaries"
+  ],
+  "practiceTips": [
+    "DATEDIF is a hidden function; type it fully because Excel will not autocomplete or show argument tips.",
+    "Always reference real date cells (or TODAY()) rather than typing dates as text.",
+    "Combine \"Y\", \"YM\", and \"YD\" with text to format human-readable durations.",
+    "Format the result cell as a number, not a date, so you see 7 instead of a stray date."
+  ]
+}

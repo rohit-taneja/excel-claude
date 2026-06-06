@@ -1,0 +1,149 @@
+[
+  {
+    "id": "countifs-001",
+    "title": "Count rows for one region",
+    "skills": ["countifs"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "Using the table below, write a formula in F2 that counts how many rows have the Region (column B) equal to \"North\".",
+    "dataset": {
+      "headers": ["Rep", "Region", "Amount"],
+      "rows": [
+        ["Amit", "North", 1200],
+        ["Priya", "South", 900],
+        ["Rahul", "North", 1500],
+        ["Sara", "East", 800],
+        ["Amit", "North", 600]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 6."
+    },
+    "expectedConcepts": ["COUNTIFS"],
+    "acceptedAnswers": [
+      "=COUNTIFS(B2:B6,\"North\")",
+      "=COUNTIFS(B:B,\"North\")",
+      "=COUNTIF(B2:B6,\"North\")"
+    ],
+    "expectedOutput": "3",
+    "explanation": "COUNTIFS(criteria_range1, criteria1, ...) counts the rows that meet every criterion. Three rows have Region \"North\", so the result is 3. With a single condition, COUNTIF works the same way.",
+    "hint": "You only need one criteria range and one criterion here; count the matching rows.",
+    "points": 10
+  },
+  {
+    "id": "countifs-002",
+    "title": "Two conditions count",
+    "skills": ["countifs"],
+    "type": "formula_input",
+    "difficulty": "medium",
+    "prompt": "Write a formula in F2 that counts rows where the Region (column B) is \"North\" AND the Amount (column C) is greater than 1000.",
+    "dataset": {
+      "headers": ["Rep", "Region", "Amount"],
+      "rows": [
+        ["Amit", "North", 1200],
+        ["Priya", "South", 900],
+        ["Rahul", "North", 1500],
+        ["Sara", "East", 800],
+        ["Amit", "North", 600]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 6."
+    },
+    "expectedConcepts": ["COUNTIFS"],
+    "acceptedAnswers": [
+      "=COUNTIFS(B2:B6,\"North\",C2:C6,\">1000\")",
+      "=COUNTIFS(C2:C6,\">1000\",B2:B6,\"North\")",
+      "=COUNTIFS(B:B,\"North\",C:C,\">1000\")"
+    ],
+    "expectedOutput": "2",
+    "explanation": "Both conditions must hold for a row to count. North rows with Amount over 1000 are Amit (1200) and Rahul (1500); the North row of 600 fails the amount test. The answer is 2. Comparison operators go in quotes: \">1000\".",
+    "hint": "Add a second criteria_range / criteria pair, and remember the >1000 part must be a quoted string.",
+    "points": 10
+  },
+  {
+    "id": "countifs-003",
+    "title": "Predict the count",
+    "skills": ["countifs"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "Given the staff table below, what does =COUNTIFS(B2:B6, \"Active\", C2:C6, \"Sales\") return?",
+    "dataset": {
+      "headers": ["Name", "Status", "Department"],
+      "rows": [
+        ["Amit", "Active", "Sales"],
+        ["Priya", "Active", "HR"],
+        ["Rahul", "Inactive", "Sales"],
+        ["Sara", "Active", "Sales"],
+        ["Neha", "Active", "Sales"]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 6."
+    },
+    "correctAnswer": "3",
+    "expectedOutput": "3",
+    "explanation": "Rows that are both Active and in Sales are Amit, Sara and Neha. Priya is Active but in HR, and Rahul is in Sales but Inactive, so neither counts. The result is 3.",
+    "hint": "Only count a person if BOTH their Status is Active and their Department is Sales.",
+    "points": 10
+  },
+  {
+    "id": "countifs-004",
+    "title": "Fix COUNTIFS vs COUNT",
+    "skills": ["countifs"],
+    "type": "fix_formula",
+    "difficulty": "medium",
+    "prompt": "This formula should count how many employees are in the \"HR\" department (column B), but it was written with the wrong function and returns an error. Fix it.",
+    "dataset": {
+      "headers": ["Name", "Department", "Salary"],
+      "rows": [
+        ["Amit", "HR", 50000],
+        ["Priya", "Sales", 60000],
+        ["Rahul", "HR", 55000],
+        ["Sara", "Finance", 70000]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 5."
+    },
+    "brokenFormula": "=COUNT(B2:B5, \"HR\")",
+    "expectedConcepts": ["COUNTIFS"],
+    "acceptedAnswers": [
+      "=COUNTIFS(B2:B5,\"HR\")",
+      "=COUNTIFS(B:B,\"HR\")",
+      "=COUNTIF(B2:B5,\"HR\")"
+    ],
+    "expectedOutput": "2",
+    "explanation": "COUNT only tallies numeric cells and ignores criteria, so it cannot filter by text. To count cells matching a condition you need COUNTIFS (or COUNTIF). Two employees are in HR, so the result is 2.",
+    "hint": "COUNT just counts numbers. Which function counts cells that meet a text condition?",
+    "points": 10
+  },
+  {
+    "id": "countifs-005",
+    "title": "Counting blanks vs non-blanks",
+    "skills": ["countifs"],
+    "type": "mcq",
+    "difficulty": "hard",
+    "prompt": "A column B (B2:B10) lists feedback comments, but some cells are empty. Which formula counts only the cells that DO contain a comment (i.e. are not blank)?",
+    "options": [
+      "=COUNTIFS(B2:B10, \"<>\")",
+      "=COUNTIFS(B2:B10, \"\")",
+      "=COUNTIFS(B2:B10, \"=blank\")",
+      "=COUNTIFS(B2:B10, <>0)"
+    ],
+    "correctAnswer": "=COUNTIFS(B2:B10, \"<>\")",
+    "explanation": "The criterion \"<>\" means 'not equal to nothing', i.e. not blank, so it counts every non-empty cell. \"\" would count blanks instead, and the other options are invalid criteria syntax.",
+    "hint": "The \"not equal to\" operator with nothing after it tests for any value being present.",
+    "points": 10
+  },
+  {
+    "id": "countifs-006",
+    "title": "Date range count scenario",
+    "skills": ["countifs"],
+    "type": "scenario",
+    "difficulty": "hard",
+    "prompt": "An orders sheet has order dates in column A (A2:A50). You want to count orders placed in the first quarter, i.e. on or after 2026-01-01 AND on or before 2026-03-31. Which formula is correct?",
+    "options": [
+      "=COUNTIFS(A2:A50, \">=2026-01-01\", A2:A50, \"<=2026-03-31\")",
+      "=COUNTIFS(A2:A50, \">=2026-01-01\" AND \"<=2026-03-31\")",
+      "=COUNTIFS(A2:A50, \">=2026-01-01\")",
+      "=COUNTIF(A2:A50, \"2026-Q1\")"
+    ],
+    "correctAnswer": "=COUNTIFS(A2:A50, \">=2026-01-01\", A2:A50, \"<=2026-03-31\")",
+    "explanation": "A date range needs two criteria on the same column: one for the lower bound and one for the upper bound. COUNTIFS lets you repeat the same criteria_range with different criteria, and each comparison must be a quoted string.",
+    "hint": "A 'between two dates' filter needs two separate criteria pairs pointing at the same date column.",
+    "points": 10
+  }
+]

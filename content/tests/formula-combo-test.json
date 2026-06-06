@@ -1,0 +1,37 @@
+{
+  "id": "formula-combo-test",
+  "title": "Formula Combination Test",
+  "description": "Real-world problems that need two or more functions working together.",
+  "category": "mixed",
+  "difficulty": "hard",
+  "skills": [
+    "if",
+    "sumifs",
+    "countifs",
+    "iferror",
+    "xlookup",
+    "vlookup",
+    "index-match",
+    "trim",
+    "text-functions",
+    "datedif",
+    "networkdays",
+    "filter",
+    "sort",
+    "unique"
+  ],
+  "durationMinutes": 25,
+  "passingScore": 60,
+  "questionIds": [
+    "combo-001",
+    "combo-002",
+    "combo-003",
+    "combo-004",
+    "combo-005",
+    "combo-006",
+    "combo-007",
+    "combo-008",
+    "combo-009",
+    "combo-010"
+  ]
+}

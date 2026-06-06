@@ -1,0 +1,148 @@
+[
+  {
+    "id": "sumifs-001",
+    "title": "Total sales for one region",
+    "skills": ["sumifs"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "Using the sales table below, write a formula in F2 that adds up the Amount (column C) for every row where the Region (column B) is \"North\".",
+    "dataset": {
+      "headers": ["Rep", "Region", "Amount"],
+      "rows": [
+        ["Amit", "North", 1200],
+        ["Priya", "South", 900],
+        ["Rahul", "North", 1500],
+        ["Sara", "East", 800],
+        ["Amit", "North", 600]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 6."
+    },
+    "expectedConcepts": ["SUMIFS"],
+    "acceptedAnswers": [
+      "=SUMIFS(C2:C6,B2:B6,\"North\")",
+      "=SUMIFS(C:C,B:B,\"North\")",
+      "=SUMIF(B2:B6,\"North\",C2:C6)"
+    ],
+    "expectedOutput": "3300",
+    "explanation": "SUMIFS(sum_range, criteria_range1, criteria1) adds only the values whose row meets every criterion. Here the three North rows (1200 + 1500 + 600) total 3300. Note that in SUMIFS the sum range comes first, unlike SUMIF.",
+    "hint": "In SUMIFS the range to add comes first, then each criteria range and its matching criterion.",
+    "points": 10
+  },
+  {
+    "id": "sumifs-002",
+    "title": "Two conditions at once",
+    "skills": ["sumifs"],
+    "type": "formula_input",
+    "difficulty": "medium",
+    "prompt": "Write a formula in F2 that sums the Amount (column C) only for rows where the Region (column B) is \"North\" AND the Rep (column A) is \"Amit\".",
+    "dataset": {
+      "headers": ["Rep", "Region", "Amount"],
+      "rows": [
+        ["Amit", "North", 1200],
+        ["Priya", "South", 900],
+        ["Rahul", "North", 1500],
+        ["Sara", "East", 800],
+        ["Amit", "North", 600]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 6."
+    },
+    "expectedConcepts": ["SUMIFS"],
+    "acceptedAnswers": [
+      "=SUMIFS(C2:C6,B2:B6,\"North\",A2:A6,\"Amit\")",
+      "=SUMIFS(C2:C6,A2:A6,\"Amit\",B2:B6,\"North\")",
+      "=SUMIFS(C:C,B:B,\"North\",A:A,\"Amit\")"
+    ],
+    "expectedOutput": "1800",
+    "explanation": "SUMIFS supports multiple criteria pairs, all of which must be TRUE for a row to count. Amit's North rows are 1200 and 600, totalling 1800. The order of the criteria pairs does not change the result.",
+    "hint": "Add a second criteria_range / criteria pair after the first one; both must match.",
+    "points": 10
+  },
+  {
+    "id": "sumifs-003",
+    "title": "Predict the SUMIFS result",
+    "skills": ["sumifs"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "Given the table below, what does =SUMIFS(C2:C6, B2:B6, \"South\") return?",
+    "dataset": {
+      "headers": ["Rep", "Region", "Amount"],
+      "rows": [
+        ["Amit", "North", 1200],
+        ["Priya", "South", 900],
+        ["Rahul", "South", 1500],
+        ["Sara", "East", 800],
+        ["Amit", "South", 600]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 6."
+    },
+    "correctAnswer": "3000",
+    "expectedOutput": "3000",
+    "explanation": "Three rows have Region \"South\": Priya (900), Rahul (1500) and Amit (600). Their Amounts sum to 3000.",
+    "hint": "Find every row where Region equals South, then add only those Amounts.",
+    "points": 10
+  },
+  {
+    "id": "sumifs-004",
+    "title": "Fix the swapped arguments",
+    "skills": ["sumifs"],
+    "type": "fix_formula",
+    "difficulty": "medium",
+    "prompt": "This formula is meant to total the Amount (column C) for the \"North\" region, but it returns a #VALUE! error because the arguments are in the wrong order. Fix it.",
+    "dataset": {
+      "headers": ["Rep", "Region", "Amount"],
+      "rows": [
+        ["Amit", "North", 1200],
+        ["Priya", "South", 900],
+        ["Rahul", "North", 1500],
+        ["Sara", "East", 800]
+      ],
+      "note": "Headers in row 1; data spans rows 2 to 5."
+    },
+    "brokenFormula": "=SUMIFS(B2:B5, \"North\", C2:C5)",
+    "expectedConcepts": ["SUMIFS"],
+    "acceptedAnswers": [
+      "=SUMIFS(C2:C5,B2:B5,\"North\")",
+      "=SUMIFS(C:C,B:B,\"North\")"
+    ],
+    "expectedOutput": "2700",
+    "explanation": "In SUMIFS the order is sum_range, then criteria_range, then criteria. The broken formula put the criterion text in the criteria_range slot. The correct version sums column C where column B equals \"North\": 1200 + 1500 = 2700.",
+    "hint": "Remember the SUMIFS order: the numbers to add come first, then the range to test, then the value to test for.",
+    "points": 10
+  },
+  {
+    "id": "sumifs-005",
+    "title": "Greater-than criterion",
+    "skills": ["sumifs"],
+    "type": "mcq",
+    "difficulty": "hard",
+    "prompt": "An expenses sheet has Amount in column B (B2:B7). Which formula totals only the amounts greater than 1000?",
+    "options": [
+      "=SUMIFS(B2:B7, B2:B7, \">1000\")",
+      "=SUMIFS(B2:B7, B2:B7, >1000)",
+      "=SUMIFS(B2:B7, \">1000\")",
+      "=SUMIFS(\">1000\", B2:B7, B2:B7)"
+    ],
+    "correctAnswer": "=SUMIFS(B2:B7, B2:B7, \">1000\")",
+    "explanation": "Comparison operators in criteria must be written as text inside double quotes, like \">1000\". The sum_range and criteria_range can be the same column when you are filtering on the values you are also summing.",
+    "hint": "A comparison criterion has to be a quoted string, and SUMIFS still needs sum_range first.",
+    "points": 10
+  },
+  {
+    "id": "sumifs-006",
+    "title": "Cell reference in criteria",
+    "skills": ["sumifs"],
+    "type": "scenario",
+    "difficulty": "hard",
+    "prompt": "A dashboard lets the user type a region name into cell E1. You want F1 to total the Amount (C2:C6) for whatever region is in E1, updating automatically. Which formula is correct?",
+    "options": [
+      "=SUMIFS(C2:C6, B2:B6, E1)",
+      "=SUMIFS(C2:C6, B2:B6, \"E1\")",
+      "=SUMIFS(C2:C6, E1, B2:B6)",
+      "=SUMIFS(C2:C6, B2:B6, =E1)"
+    ],
+    "correctAnswer": "=SUMIFS(C2:C6, B2:B6, E1)",
+    "explanation": "To make a criterion dynamic, reference the cell directly (E1) without quotes. Quoting it as \"E1\" would look for the literal text E1, and \"=E1\" is invalid syntax inside a criteria argument.",
+    "hint": "A bare cell reference picks up whatever the user types; quotes would turn it into literal text.",
+    "points": 10
+  }
+]

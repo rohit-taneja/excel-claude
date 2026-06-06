@@ -1,0 +1,53 @@
+{
+  "id": "networkdays",
+  "title": "NETWORKDAYS",
+  "order": 14,
+  "priority": "medium",
+  "category": "Date & Time",
+  "summary": "NETWORKDAYS counts the number of working days between two dates, automatically excluding weekends and any holidays you supply.",
+  "syntax": "=NETWORKDAYS(start_date, end_date, [holidays])",
+  "difficulty": "medium",
+  "icon": "CalendarClock",
+  "jobUseCases": [
+    "Calculate business days a support ticket stayed open for an SLA report",
+    "Work out working days until a project deadline for resource planning",
+    "Count chargeable working days in a month for a consultant's timesheet",
+    "Measure invoice payment turnaround in business days for finance",
+    "Plan delivery dates that skip weekends and public holidays in operations"
+  ],
+  "examples": [
+    {
+      "title": "Working days between two dates",
+      "formula": "=NETWORKDAYS(B2, C2)",
+      "explanation": "With a start date in B2 and end date in C2, this returns the count of Monday-to-Friday days between them, inclusive of both ends. A Mon-to-Fri span returns 5; it ignores Saturday and Sunday automatically."
+    },
+    {
+      "title": "Excluding public holidays",
+      "formula": "=NETWORKDAYS(B2, C2, $H$2:$H$10)",
+      "explanation": "Pass a range of holiday dates (e.g. Diwali, Republic Day) as the third argument. Any holiday that falls on a weekday is subtracted, so the result reflects true working days, which is essential for accurate SLA tracking."
+    },
+    {
+      "title": "Business days elapsed so far",
+      "formula": "=NETWORKDAYS(B2, TODAY(), $H$2:$H$10)",
+      "explanation": "Using TODAY() as the end date gives a live count of working days a ticket has been open up to now, minus listed holidays. Wrapping it as part of an aging report keeps SLA breach flags current."
+    },
+    {
+      "title": "Custom weekend with NETWORKDAYS.INTL",
+      "formula": "=NETWORKDAYS.INTL(B2, C2, 7, $H$2:$H$10)",
+      "explanation": "When the work week is not Mon-Fri, use NETWORKDAYS.INTL. The weekend code 7 means Friday-Saturday off (common in some regions), and you can still pass a holidays range. The base NETWORKDAYS always assumes Sat-Sun."
+    }
+  ],
+  "commonMistakes": [
+    "Assuming NETWORKDAYS is exclusive; it actually counts both the start and end dates when they are weekdays",
+    "Using NETWORKDAYS for a non-standard work week instead of NETWORKDAYS.INTL, getting wrong weekend handling",
+    "Listing holidays as text rather than real date values, so they are not excluded",
+    "Forgetting to lock the holidays range ($H$2:$H$10) so it shifts when the formula is copied down",
+    "Expecting a negative result when end is before start; the function returns a negative count, which can surprise users"
+  ],
+  "practiceTips": [
+    "Keep a maintained holidays list (named range) and reference it across all your business-day formulas.",
+    "Use NETWORKDAYS.INTL when your weekend is not Saturday-Sunday or varies by country.",
+    "Pair with WORKDAY to do the reverse: find a date that is N working days after a start date.",
+    "Format inputs as true dates; if they look right but the count is off, check for text-formatted dates."
+  ]
+}

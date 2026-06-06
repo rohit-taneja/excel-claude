@@ -1,0 +1,20 @@
+{
+  "id": "sales-excel-test",
+  "title": "Sales Excel Test",
+  "description": "Sales reporting essentials: totals by criteria, price lookups and summary PivotTables.",
+  "category": "job-simulation",
+  "difficulty": "medium",
+  "skills": ["sumifs", "xlookup", "vlookup", "iferror", "if", "pivot-tables"],
+  "durationMinutes": 20,
+  "passingScore": 65,
+  "questionIds": [
+    "sumifs-001",
+    "sumifs-002",
+    "lookup-001",
+    "lookup-004",
+    "combo-001",
+    "combo-010",
+    "pivot-002",
+    "pivot-003"
+  ]
+}

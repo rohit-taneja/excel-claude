@@ -1,0 +1,53 @@
+{
+  "id": "conditional-formatting",
+  "title": "Conditional Formatting",
+  "order": 11,
+  "priority": "medium",
+  "category": "Formatting",
+  "summary": "Conditional Formatting automatically colours, highlights, or adds icons to cells based on rules you set, so important values stand out without manual styling.",
+  "syntax": "Select range > Home > Conditional Formatting > choose a rule type > set condition and format",
+  "difficulty": "easy",
+  "icon": "Palette",
+  "jobUseCases": [
+    "Highlight overdue invoices in red on an accounts-receivable tracker",
+    "Flag KPIs below target with traffic-light icons on a sales dashboard",
+    "Shade duplicate employee IDs to catch data-entry errors in an HR sheet",
+    "Use a colour scale to show heat across a regional performance grid",
+    "Highlight the entire row of any high-priority support ticket"
+  ],
+  "examples": [
+    {
+      "title": "Highlight values greater than a target",
+      "formula": "Select Sales > Home > Conditional Formatting > Highlight Cells Rules > Greater Than > 50000 > Green Fill",
+      "explanation": "Select the Sales column, then apply Greater Than with 50000. Every cell above 50,000 gets a green fill automatically, instantly showing which deals beat the target."
+    },
+    {
+      "title": "Find and shade duplicates",
+      "formula": "Select range > Conditional Formatting > Highlight Cells Rules > Duplicate Values",
+      "explanation": "Choose Duplicate Values on a list of employee IDs or emails. Excel highlights any value that appears more than once, making it easy to spot and clean up data-quality issues like a duplicated 'Priya Sharma' record."
+    },
+    {
+      "title": "Data bars for quick comparison",
+      "formula": "Select numbers > Conditional Formatting > Data Bars > Gradient Fill",
+      "explanation": "Data Bars draw a small in-cell bar proportional to each value, so a column of monthly revenue reads like a mini bar chart. Larger numbers get longer bars, letting readers compare magnitudes at a glance."
+    },
+    {
+      "title": "Formula-based rule to highlight a whole row",
+      "formula": "=$E2=\"Overdue\"  (New Rule > Use a formula to determine which cells to format)",
+      "explanation": "Select the full data range, choose Use a formula, and enter =$E2=\"Overdue\". The locked column ($E) and relative row (2) make Excel format every row whose Status column equals Overdue, highlighting the entire record, not just one cell."
+    }
+  ],
+  "commonMistakes": [
+    "Using a relative reference like E2 when a formula rule needs the column locked ($E2) to highlight whole rows correctly",
+    "Applying the rule to a single cell instead of the full intended range, so most data stays unformatted",
+    "Stacking many overlapping rules and not setting the priority/Stop If True order, leading to unexpected colours",
+    "Comparing text and numbers (e.g. '50000' stored as text vs the number 50000) so the rule never triggers",
+    "Forgetting that conditional formats are copied along with cells, accidentally spreading rules where they do not belong"
+  ],
+  "practiceTips": [
+    "Use Manage Rules (Conditional Formatting > Manage Rules) to view, edit, and reorder every rule on a sheet.",
+    "Reference a cell for thresholds (e.g. >$H$1) so you can change the target value without editing the rule.",
+    "Test a formula rule on the top-left cell of your selection first, since that is where Excel anchors it.",
+    "Use Clear Rules from Selected Cells to remove stray formatting before reapplying clean rules."
+  ]
+}

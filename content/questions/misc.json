@@ -1,0 +1,256 @@
+[
+  {
+    "id": "misc-001",
+    "title": "Catch lookup errors with IFERROR",
+    "skills": ["iferror"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "In cell D2, look up the Price (column C) for the Product Code in D1 using XLOOKUP, but if the code is missing return the text \"No Price\" instead of an error. Write the IFERROR formula.",
+    "dataset": {
+      "headers": ["Code", "Product", "Price"],
+      "rows": [
+        ["A1", "Pen", 20],
+        ["A2", "Notebook", 60],
+        ["A3", "Stapler", 150],
+        ["A4", "Marker", 35]
+      ],
+      "note": "D1 holds the code to look up. D2 holds your formula."
+    },
+    "expectedConcepts": ["IFERROR"],
+    "acceptedAnswers": [
+      "=IFERROR(XLOOKUP(D1,A2:A5,C2:C5),\"No Price\")",
+      "=IFERROR(VLOOKUP(D1,A2:C5,3,FALSE),\"No Price\")",
+      "=IFERROR(INDEX(C2:C5,MATCH(D1,A2:A5,0)),\"No Price\")"
+    ],
+    "explanation": "IFERROR(value, value_if_error) runs the lookup first; if it succeeds you get the price, and if it errors (e.g. the code is missing) you get \"No Price\" instead of an ugly #N/A. IFERROR works around any lookup function, so VLOOKUP, XLOOKUP, or INDEX/MATCH inside it are all acceptable.",
+    "hint": "Put your lookup as the first argument of IFERROR and \"No Price\" as the second.",
+    "points": 10
+  },
+  {
+    "id": "misc-002",
+    "title": "Predict NETWORKDAYS over a single week",
+    "skills": ["networkdays"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "Cell C2 contains =NETWORKDAYS(A2,B2) where A2 is the start date Monday 2026-06-01 and B2 is the end date Friday 2026-06-05. No holidays are specified. What number does C2 return?",
+    "dataset": {
+      "headers": ["Start", "End", "Working Days"],
+      "rows": [
+        ["2026-06-01", "2026-06-05", ""]
+      ],
+      "note": "June 1, 2026 is a Monday and June 5, 2026 is a Friday. NETWORKDAYS counts both endpoints and excludes Saturdays and Sundays."
+    },
+    "correctAnswer": "5",
+    "expectedOutput": "5",
+    "explanation": "NETWORKDAYS counts every weekday from the start through the end, including both endpoints, while skipping Saturdays and Sundays. Monday through Friday of the same week is Mon, Tue, Wed, Thu, Fri = 5 working days. There are no weekend days inside this range, so the answer is 5.",
+    "hint": "Count Mon, Tue, Wed, Thu, Fri inclusively; there are no weekends in between.",
+    "points": 10
+  },
+  {
+    "id": "misc-003",
+    "title": "Predict DATEDIF in complete years",
+    "skills": ["datedif"],
+    "type": "output_prediction",
+    "difficulty": "medium",
+    "prompt": "Cell C2 contains =DATEDIF(A2,B2,\"Y\") where A2 is 2020-03-01 and B2 is 2026-03-01. What number does C2 return?",
+    "dataset": {
+      "headers": ["Start", "End", "Years"],
+      "rows": [
+        ["2020-03-01", "2026-03-01", ""]
+      ],
+      "note": "The \"Y\" unit returns the number of COMPLETE years between the two dates."
+    },
+    "correctAnswer": "6",
+    "expectedOutput": "6",
+    "explanation": "DATEDIF with the \"Y\" unit returns the number of full years elapsed between the start and end dates. From 2020-03-01 to 2026-03-01 is exactly 6 years with no partial year, so the result is 6. If the end date were one day earlier (2026-02-28), it would return 5 because the sixth year would not yet be complete.",
+    "hint": "Subtract the years and check whether the final year is fully completed.",
+    "points": 10
+  },
+  {
+    "id": "misc-004",
+    "title": "Write a DATEDIF age formula",
+    "skills": ["datedif"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "In cell C2, calculate the employee's full age in complete years from their Date of Birth in B2 up to today. Write the formula.",
+    "dataset": {
+      "headers": ["Name", "Date of Birth", "Age"],
+      "rows": [
+        ["Amit", "1995-07-12", ""],
+        ["Priya", "1988-02-28", ""],
+        ["Rahul", "2000-11-05", ""],
+        ["Sara", "1992-09-30", ""]
+      ],
+      "note": "Use TODAY() as the end date. C2 holds your formula."
+    },
+    "expectedConcepts": ["DATEDIF"],
+    "acceptedAnswers": [
+      "=DATEDIF(B2,TODAY(),\"Y\")",
+      "=DATEDIF(B2,TODAY(),\"y\")"
+    ],
+    "explanation": "DATEDIF(start_date, end_date, \"Y\") returns the number of complete years between two dates, which is exactly how age is calculated. Using TODAY() as the end date keeps the age current every time the sheet recalculates. The start date (birth date) must come before the end date or DATEDIF errors.",
+    "hint": "DATEDIF(birth_date, TODAY(), \"Y\").",
+    "points": 10
+  },
+  {
+    "id": "misc-005",
+    "title": "Filter rows that meet a threshold",
+    "skills": ["filter"],
+    "type": "formula_input",
+    "difficulty": "medium",
+    "prompt": "In cell E2, use FILTER to spill the names (column A) of every rep whose Sales (column B) is greater than 50000.",
+    "dataset": {
+      "headers": ["Rep", "Sales", "Region"],
+      "rows": [
+        ["Amit", 60000, "North"],
+        ["Priya", 45000, "South"],
+        ["Rahul", 70000, "East"],
+        ["Sara", 30000, "West"]
+      ],
+      "note": "E2 holds your spill formula. Expected spill: Amit, Rahul."
+    },
+    "expectedConcepts": ["FILTER"],
+    "acceptedAnswers": [
+      "=FILTER(A2:A5,B2:B5>50000)",
+      "=FILTER(A2:A5,B2:B5>50000,\"\")",
+      "=FILTER(A2:A5,B2:B5>50000,\"None\")"
+    ],
+    "explanation": "FILTER(array, include) returns only the rows of the array where the include condition is TRUE. Here B2:B5>50000 produces TRUE for Amit (60000) and Rahul (70000), so FILTER spills those two names. The optional third argument is what to show when nothing matches; without it, an all-false condition returns #CALC!.",
+    "hint": "FILTER(names_range, sales_range > 50000).",
+    "points": 10
+  },
+  {
+    "id": "misc-006",
+    "title": "Filter by an exact category match",
+    "skills": ["filter"],
+    "type": "formula_input",
+    "difficulty": "medium",
+    "prompt": "In cell E2, use FILTER to spill the names (column A) of every employee whose Department (column C) is exactly \"Finance\".",
+    "dataset": {
+      "headers": ["Name", "Salary", "Department"],
+      "rows": [
+        ["Amit", 55000, "Finance"],
+        ["Priya", 48000, "HR"],
+        ["Rahul", 52000, "Finance"],
+        ["Sara", 60000, "Sales"]
+      ],
+      "note": "E2 holds your spill formula. Expected spill: Amit, Rahul."
+    },
+    "expectedConcepts": ["FILTER"],
+    "acceptedAnswers": [
+      "=FILTER(A2:A5,C2:C5=\"Finance\")",
+      "=FILTER(A2:A5,C2:C5=\"Finance\",\"\")",
+      "=FILTER(A2:A5,C2:C5=\"Finance\",\"None\")"
+    ],
+    "explanation": "FILTER keeps only the rows where the include argument is TRUE. The condition C2:C5=\"Finance\" is TRUE for Amit and Rahul, so FILTER spills exactly those two names. Text comparisons in FILTER are case-insensitive, so \"finance\" would match too.",
+    "hint": "FILTER(names_range, department_range = \"Finance\").",
+    "points": 10
+  },
+  {
+    "id": "misc-007",
+    "title": "Sort sales from highest to lowest",
+    "skills": ["sort"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "In cell E2, use SORT to spill the Sales values (column B) sorted in DESCENDING order (largest first).",
+    "dataset": {
+      "headers": ["Rep", "Sales", "Region"],
+      "rows": [
+        ["Amit", 60000, "North"],
+        ["Priya", 45000, "South"],
+        ["Rahul", 70000, "East"],
+        ["Sara", 30000, "West"]
+      ],
+      "note": "E2 holds your spill formula. Expected spill: 70000, 60000, 45000, 30000."
+    },
+    "expectedConcepts": ["SORT"],
+    "acceptedAnswers": [
+      "=SORT(B2:B5,1,-1)",
+      "=SORT(B2:B5,,-1)"
+    ],
+    "explanation": "SORT(array, sort_index, sort_order) orders the array. A sort_order of -1 means descending (largest first), so the values spill as 70000, 60000, 45000, 30000. Because we are sorting a single column, sort_index is 1 (or can be omitted). Use 1 for ascending order instead.",
+    "hint": "SORT(range, 1, -1) where -1 means descending.",
+    "points": 10
+  },
+  {
+    "id": "misc-008",
+    "title": "Get a distinct list with UNIQUE",
+    "skills": ["unique"],
+    "type": "formula_input",
+    "difficulty": "easy",
+    "prompt": "In cell E2, use UNIQUE to spill the list of distinct Region names (column C), removing duplicates.",
+    "dataset": {
+      "headers": ["Rep", "Sales", "Region"],
+      "rows": [
+        ["Amit", 60000, "North"],
+        ["Priya", 45000, "South"],
+        ["Rahul", 70000, "North"],
+        ["Sara", 30000, "South"]
+      ],
+      "note": "E2 holds your spill formula. Expected spill: North, South."
+    },
+    "expectedConcepts": ["UNIQUE"],
+    "acceptedAnswers": [
+      "=UNIQUE(C2:C5)"
+    ],
+    "explanation": "UNIQUE(array) returns each distinct value once, in the order it first appears. With North, South, North, South in the range, UNIQUE spills just North and South. It is the dynamic-array replacement for Remove Duplicates and updates automatically as the source changes.",
+    "hint": "UNIQUE(range) collapses duplicates into a distinct list.",
+    "points": 10
+  },
+  {
+    "id": "misc-009",
+    "title": "Highlight cells with Conditional Formatting",
+    "skills": ["conditional-formatting"],
+    "type": "scenario",
+    "difficulty": "easy",
+    "prompt": "You want every cell in the Sales column that is greater than 50000 to turn green automatically, and to keep updating as the numbers change. Which feature and setup should you use?",
+    "dataset": {
+      "headers": ["Rep", "Sales"],
+      "rows": [
+        ["Amit", 60000],
+        ["Priya", 45000],
+        ["Rahul", 70000],
+        ["Sara", 30000]
+      ],
+      "note": "You want the highlight to recalculate whenever a value changes."
+    },
+    "options": [
+      "Select the Sales range, then Home > Conditional Formatting > Highlight Cells Rules > Greater Than, enter 50000, pick a green fill",
+      "Manually select each qualifying cell and apply a green fill from the Font group",
+      "Sort the Sales column descending and color the top rows green",
+      "Use Data Validation to reject any value over 50000"
+    ],
+    "correctAnswer": "Select the Sales range, then Home > Conditional Formatting > Highlight Cells Rules > Greater Than, enter 50000, pick a green fill",
+    "explanation": "Conditional Formatting applies formatting based on a rule, so it re-evaluates automatically whenever the data changes. The Highlight Cells Rules > Greater Than option lets you set the 50000 threshold and choose a green fill. Manual coloring is static and breaks the moment a value changes; Data Validation controls input, not appearance.",
+    "hint": "Look for a rules-based, auto-updating formatting feature, not manual fill.",
+    "points": 10
+  },
+  {
+    "id": "misc-010",
+    "title": "Restrict input with Data Validation",
+    "skills": ["data-validation"],
+    "type": "scenario",
+    "difficulty": "easy",
+    "prompt": "In an HR sheet, the Department column should only ever accept one of three values: Finance, HR, or Sales, chosen from a drop-down so nobody can type a typo like \"finence\". What is the correct way to set this up?",
+    "dataset": {
+      "headers": ["Name", "Department"],
+      "rows": [
+        ["Amit", ""],
+        ["Priya", ""],
+        ["Rahul", ""],
+        ["Sara", ""]
+      ],
+      "note": "You need a controlled drop-down list that blocks invalid entries."
+    },
+    "options": [
+      "Select the Department range, then Data > Data Validation > Allow: List, and enter Finance,HR,Sales as the Source",
+      "Apply Conditional Formatting to color invalid departments red",
+      "Type the three options in a comment on the column header",
+      "Use IFERROR in the Department cells to catch wrong values"
+    ],
+    "correctAnswer": "Select the Department range, then Data > Data Validation > Allow: List, and enter Finance,HR,Sales as the Source",
+    "explanation": "Data Validation with Allow set to List creates an in-cell drop-down and rejects any entry not in the list, preventing typos at the point of input. Conditional Formatting only changes color (it does not block the entry), and IFERROR handles formula errors, not data entry. Data Validation is the tool for controlling what users can type.",
+    "hint": "The feature that creates a drop-down and blocks invalid entries lives under the Data tab.",
+    "points": 10
+  }
+]

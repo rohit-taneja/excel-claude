@@ -1,0 +1,52 @@
+{
+  "id": "vlookup",
+  "title": "VLOOKUP",
+  "order": 5,
+  "priority": "high",
+  "category": "Lookup",
+  "summary": "VLOOKUP searches for a value in the first column of a table and returns a value from a column to its right. It is one of the most widely used lookup functions in business.",
+  "syntax": "=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])",
+  "difficulty": "medium",
+  "icon": "Search",
+  "jobUseCases": [
+    "Pulling an employee's salary from an HR table using their employee ID",
+    "Fetching a product's unit price into an order form from a price list",
+    "Looking up a customer's city based on their account number",
+    "Matching a course code to its title in a training records sheet",
+    "Bringing vendor details into a purchase order from a supplier master"
+  ],
+  "examples": [
+    {
+      "title": "Exact match lookup",
+      "formula": "=VLOOKUP(\"E102\", A2:D100, 3, FALSE)",
+      "explanation": "Finds 'E102' in the first column (A) and returns the value from the 3rd column (C). FALSE forces an exact match, which is almost always what you want."
+    },
+    {
+      "title": "Lookup from an input cell",
+      "formula": "=VLOOKUP(G2, A2:D100, 4, FALSE)",
+      "explanation": "Looks up whatever ID is in G2 and returns the 4th column. Using a cell reference makes the lookup reusable for any value typed in."
+    },
+    {
+      "title": "Approximate match for grades",
+      "formula": "=VLOOKUP(B2, $F$2:$G$6, 2, TRUE)",
+      "explanation": "TRUE finds the closest value not exceeding B2 in a sorted bracket table, useful for grade or tax bands. The table's first column must be sorted ascending."
+    },
+    {
+      "title": "Locking the table with absolute references",
+      "formula": "=VLOOKUP(A2, $H$2:$J$50, 2, FALSE)",
+      "explanation": "Dollar signs freeze the table range so it does not shift when the formula is copied down the column. The lookup_value stays relative."
+    }
+  ],
+  "commonMistakes": [
+    "Omitting FALSE so VLOOKUP defaults to approximate match and returns wrong results on unsorted data",
+    "Counting col_index_num from the wrong column; it counts from the first column of table_array, not the sheet",
+    "Trying to look left; VLOOKUP can only return columns to the right of the lookup column",
+    "Forgetting absolute references on table_array, so the range drifts when copied",
+    "Breaking formulas by inserting a column inside table_array, which shifts the col_index_num"
+  ],
+  "practiceTips": [
+    "Always use FALSE for exact matches unless you specifically need bracket lookups",
+    "Lock the table_array with $ signs before copying the formula down",
+    "Wrap in IFERROR to show a friendly message when a value is not found, or switch to XLOOKUP"
+  ]
+}
