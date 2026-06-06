@@ -132,9 +132,10 @@ export function TestRunner({
         })}
       </div>
 
-      <Card>
+      <Card className="transition-shadow duration-300 hover:shadow-md">
         <CardContent className="pt-6">
           <QuestionRenderer
+            key={question.id}
             question={question}
             value={answers[question.id] ?? ""}
             onChange={(v) => setAnswer(question.id, v)}

@@ -36,7 +36,10 @@ export function Confetti({ className }: { className?: string }) {
       {PIECES.map((p, i) => (
         <span
           key={i}
-          className={cn("absolute top-0 block", p.round ? "rounded-full" : "rounded-[1px]")}
+          className={cn(
+            "absolute top-0 block",
+            p.round ? "rounded-full" : "rounded-[1px]",
+          )}
           style={{
             left: `${p.left}%`,
             width: p.size,

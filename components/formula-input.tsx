@@ -14,7 +14,7 @@ import { searchFunctions, type ExcelFunctionDoc } from "@/lib/excel-functions";
 export function FormulaInput({
   value,
   onChange,
-  placeholder = "=IF(A2>=50,\"Pass\",\"Fail\")",
+  placeholder = '=IF(A2>=50,"Pass","Fail")',
   disabled,
   className,
   onEnter,
@@ -28,17 +28,21 @@ export function FormulaInput({
   onEnter?: () => void;
 }) {
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const listId = React.useId();
   const [suggestions, setSuggestions] = React.useState<ExcelFunctionDoc[]>([]);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(0);
 
   /** The alphabetic "word" immediately before the caret, e.g. the `VLO` in `=VLO`. */
-  const currentWord = React.useCallback((caret: number) => {
-    const upto = value.slice(0, caret);
-    const match = /[A-Za-z]+$/.exec(upto);
-    if (!match) return { word: "", start: caret };
-    return { word: match[0], start: caret - match[0].length };
-  }, [value]);
+  const currentWord = React.useCallback(
+    (caret: number) => {
+      const upto = value.slice(0, caret);
+      const match = /[A-Za-z]+$/.exec(upto);
+      if (!match) return { word: "", start: caret };
+      return { word: match[0], start: caret - match[0].length };
+    },
+    [value],
+  );
 
   const refreshSuggestions = React.useCallback(
     (caret: number) => {
@@ -134,11 +138,14 @@ export function FormulaInput({
             window.setTimeout(() => setOpen(false), 120);
           }}
           onClick={(e) =>
-            refreshSuggestions((e.target as HTMLInputElement).selectionStart ?? 0)
+            refreshSuggestions(
+              (e.target as HTMLInputElement).selectionStart ?? 0,
+            )
           }
           placeholder={placeholder}
           className="w-full bg-transparent px-3 py-2 font-mono text-sm outline-none placeholder:text-muted-foreground/60"
           role="combobox"
+          aria-controls={listId}
           aria-expanded={open}
           aria-autocomplete="list"
         />
@@ -146,6 +153,7 @@ export function FormulaInput({
 
       {open && suggestions.length > 0 ? (
         <ul
+          id={listId}
           className="absolute z-30 mt-1 max-h-72 w-full overflow-auto rounded-md border bg-popover p-1 shadow-lg animate-in fade-in-0 zoom-in-95"
           role="listbox"
         >
@@ -172,7 +180,9 @@ export function FormulaInput({
                     {doc.signature}
                   </span>
                 </span>
-                <span className="text-xs text-muted-foreground">{doc.summary}</span>
+                <span className="text-xs text-muted-foreground">
+                  {doc.summary}
+                </span>
               </button>
             </li>
           ))}

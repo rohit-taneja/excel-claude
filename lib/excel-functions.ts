@@ -12,13 +12,7 @@ export interface ExcelFunctionDoc {
   /** One-line description shown in the autocomplete dropdown. */
   summary: string;
   /** Loose grouping used only for ordering/hints. */
-  category:
-    | "Logic"
-    | "Text"
-    | "Lookup"
-    | "Math"
-    | "Statistical"
-    | "Date";
+  category: "Logic" | "Text" | "Lookup" | "Math" | "Statistical" | "Date";
 }
 
 export const EXCEL_FUNCTIONS: ExcelFunctionDoc[] = [
@@ -326,7 +320,9 @@ export const EXCEL_FUNCTIONS: ExcelFunctionDoc[] = [
 ];
 
 /** All known function names, upper-case. */
-export const EXCEL_FUNCTION_NAMES: string[] = EXCEL_FUNCTIONS.map((f) => f.name);
+export const EXCEL_FUNCTION_NAMES: string[] = EXCEL_FUNCTIONS.map(
+  (f) => f.name,
+);
 
 const byName = new Map(EXCEL_FUNCTIONS.map((f) => [f.name, f]));
 
@@ -338,7 +334,10 @@ export function getFunctionDoc(name: string): ExcelFunctionDoc | undefined {
  * Return up to `limit` function docs whose name starts with (then merely
  * contains) the given fragment, ranked so prefix matches come first.
  */
-export function searchFunctions(fragment: string, limit = 8): ExcelFunctionDoc[] {
+export function searchFunctions(
+  fragment: string,
+  limit = 8,
+): ExcelFunctionDoc[] {
   const q = fragment.trim().toUpperCase();
   if (!q) return [];
   const prefix: ExcelFunctionDoc[] = [];

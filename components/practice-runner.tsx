@@ -2,7 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { CheckCircle2, RotateCcw, Trophy } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  RotateCcw,
+  Trophy,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import type { GradeResult, Question } from "@/lib/types";
@@ -17,7 +23,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { QuestionRenderer, type ReviewInfo } from "@/components/question-renderer";
+import {
+  QuestionRenderer,
+  type ReviewInfo,
+} from "@/components/question-renderer";
+import { Confetti } from "@/components/confetti";
 
 function correctText(q: Question): string {
   if (q.type === "mcq" || q.type === "scenario") return q.correctAnswer ?? "";
@@ -44,7 +54,10 @@ export function PracticeRunner({
   const question = questions[index];
   const checkedCount = Object.keys(results).length;
 
-  const earned = Object.values(results).reduce((s, r) => s + r.pointsAwarded, 0);
+  const earned = Object.values(results).reduce(
+    (s, r) => s + r.pointsAwarded,
+    0,
+  );
   const max = Object.values(results).reduce((s, r) => s + r.maxPoints, 0);
   const finished = checkedCount === total && total > 0;
   const scorePercent = max > 0 ? Math.round((earned / max) * 100) : 0;
@@ -62,13 +75,27 @@ export function PracticeRunner({
       toast.warning("Enter an answer first.");
       return;
     }
-    setResults((prev) => ({ ...prev, [question.id]: gradeQuestion(question, answer) }));
+    setResults((prev) => ({
+      ...prev,
+      [question.id]: gradeQuestion(question, answer),
+    }));
   }
 
   function reset() {
     setAnswers({});
     setResults({});
     setIndex(0);
+    recordedRef.current = false;
+  }
+
+  function retryQuestion() {
+    setResults((prev) => {
+      const next = { ...prev };
+      delete next[question.id];
+      return next;
+    });
+    setAnswers((prev) => ({ ...prev, [question.id]: "" }));
+    // Allow progress to be re-recorded if the run was already complete.
     recordedRef.current = false;
   }
 
@@ -106,9 +133,10 @@ export function PracticeRunner({
       </div>
       <Progress value={(checkedCount / total) * 100} />
 
-      <Card>
+      <Card className="transition-shadow duration-300 hover:shadow-md">
         <CardContent className="pt-6">
           <QuestionRenderer
+            key={question.id}
             question={question}
             value={answers[question.id] ?? ""}
             onChange={(v) =>
@@ -119,31 +147,57 @@ export function PracticeRunner({
             total={total}
           />
         </CardContent>
-        <CardFooter className="justify-between gap-2">
+        <CardFooter className="flex-wrap justify-between gap-2">
           <Button
             variant="outline"
             disabled={index === 0}
             onClick={() => setIndex((i) => Math.max(0, i - 1))}
+            className="gap-1.5"
           >
+            <ChevronLeft className="size-4" />
             Previous
           </Button>
-          {!result ? (
-            <Button onClick={check}>Check answer</Button>
-          ) : index < total - 1 ? (
-            <Button onClick={() => setIndex((i) => i + 1)}>Next question</Button>
-          ) : (
-            <span className="text-sm font-medium text-muted-foreground">
-              All done!
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {!result ? (
+              <Button onClick={check} className="gap-1.5">
+                <CheckCircle2 className="size-4" />
+                Check answer
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={retryQuestion}
+                  className="gap-1.5"
+                >
+                  <RotateCcw className="size-4" />
+                  Retry
+                </Button>
+                {index < total - 1 ? (
+                  <Button
+                    onClick={() => setIndex((i) => i + 1)}
+                    className="gap-1.5"
+                  >
+                    Next question
+                    <ChevronRight className="size-4" />
+                  </Button>
+                ) : (
+                  <span className="text-sm font-medium text-muted-foreground">
+                    All done!
+                  </span>
+                )}
+              </>
+            )}
+          </div>
         </CardFooter>
       </Card>
 
       {finished ? (
-        <Card className="border-primary/30">
+        <Card className="relative overflow-hidden border-primary/30 animate-in fade-in-0 zoom-in-95 duration-500">
+          <Confetti />
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Trophy className="size-5 text-amber-500" />
+              <Trophy className="size-5 text-amber-500 animate-pop" />
               Practice complete
             </CardTitle>
           </CardHeader>

@@ -83,7 +83,9 @@ export function DatasetTable({
                   key={i}
                   className={cn(
                     "border-b border-r px-3 py-1 text-center text-xs font-semibold last:border-r-0",
-                    applied && i === resultCol && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+                    applied &&
+                      i === resultCol &&
+                      "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
                   )}
                 >
                   {columnLetter(i)}
@@ -114,7 +116,8 @@ export function DatasetTable({
                   {r + 2}
                 </td>
                 {Array.from({ length: colCount }).map((_, c) => {
-                  const result = applied && c === resultCol ? applied.values[r] : undefined;
+                  const result =
+                    applied && c === resultCol ? applied.values[r] : undefined;
                   if (result) {
                     return (
                       <td

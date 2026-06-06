@@ -41,10 +41,12 @@ interface RangeValue {
 type Value = Scalar | RangeValue;
 
 function isRange(v: Value): v is RangeValue {
-  return typeof v === "object" && v !== null && (v as RangeValue).kind === "range";
+  return (
+    typeof v === "object" && v !== null && (v as RangeValue).kind === "range"
+  );
 }
 
-function isError(v: Value): v is ExcelError {
+function isError(v: unknown): v is ExcelError {
   return v instanceof ExcelError;
 }
 
@@ -167,7 +169,11 @@ type Node =
   | { type: "string"; value: string }
   | { type: "bool"; value: boolean }
   | { type: "ref"; col: number; colAbs: boolean; row: number; rowAbs: boolean }
-  | { type: "range"; from: Extract<Node, { type: "ref" }>; to: Extract<Node, { type: "ref" }> }
+  | {
+      type: "range";
+      from: Extract<Node, { type: "ref" }>;
+      to: Extract<Node, { type: "ref" }>;
+    }
   | { type: "unary"; op: string; operand: Node }
   | { type: "postfix"; op: string; operand: Node }
   | { type: "binary"; op: string; left: Node; right: Node }
@@ -286,10 +292,7 @@ class Parser {
   }
 
   private parseUnary(): Node {
-    if (
-      this.peek()?.type === "op" &&
-      ["+", "-"].includes(this.peek()!.value)
-    ) {
+    if (this.peek()?.type === "op" && ["+", "-"].includes(this.peek()!.value)) {
       const op = this.next().value;
       return { type: "unary", op, operand: this.parseUnary() };
     }
@@ -386,7 +389,10 @@ function cellAt(ctx: EvalContext, col: number, row: number): Scalar {
   return v ?? "";
 }
 
-function effectiveRow(ref: Extract<Node, { type: "ref" }>, ctx: EvalContext): number {
+function effectiveRow(
+  ref: Extract<Node, { type: "ref" }>,
+  ctx: EvalContext,
+): number {
   return ref.rowAbs ? ref.row : ref.row + ctx.rowOffset;
 }
 
@@ -452,7 +458,10 @@ function matchesCriteria(cell: Scalar, criteria: Scalar): boolean {
 
   const rhsNum = Number(rhsRaw);
   const cellNum = typeof cell === "number" ? cell : Number(String(cell).trim());
-  const bothNumeric = !Number.isNaN(rhsNum) && !Number.isNaN(cellNum) && String(cell).trim() !== "";
+  const bothNumeric =
+    !Number.isNaN(rhsNum) &&
+    !Number.isNaN(cellNum) &&
+    String(cell).trim() !== "";
 
   switch (op) {
     case "<":
@@ -488,8 +497,10 @@ function looseEquals(cell: Scalar, rhs: string): boolean {
   }
   const rhsNum = Number(rhs);
   if (!Number.isNaN(rhsNum) && rhs.trim() !== "") {
-    const cellNum = typeof cell === "number" ? cell : Number(String(cell).trim());
-    if (!Number.isNaN(cellNum) && String(cell).trim() !== "") return cellNum === rhsNum;
+    const cellNum =
+      typeof cell === "number" ? cell : Number(String(cell).trim());
+    if (!Number.isNaN(cellNum) && String(cell).trim() !== "")
+      return cellNum === rhsNum;
   }
   return String(cell).trim().toLowerCase() === rhs.trim().toLowerCase();
 }
@@ -520,7 +531,8 @@ function evalNode(node: Node, ctx: EvalContext): Value {
       const cells: Scalar[][] = [];
       for (let r = rowStart; r <= rowEnd; r++) {
         const rowCells: Scalar[] = [];
-        for (let c = colStart; c <= colEnd; c++) rowCells.push(cellAt(ctx, c, r));
+        for (let c = colStart; c <= colEnd; c++)
+          rowCells.push(cellAt(ctx, c, r));
         cells.push(rowCells);
       }
       return { kind: "range", cells };
@@ -555,7 +567,10 @@ function scalar(v: Value): Scalar {
   return v;
 }
 
-function evalBinary(node: Extract<Node, { type: "binary" }>, ctx: EvalContext): Value {
+function evalBinary(
+  node: Extract<Node, { type: "binary" }>,
+  ctx: EvalContext,
+): Value {
   const op = node.op;
   const left = scalar(evalNode(node.left, ctx));
   const right = scalar(evalNode(node.right, ctx));
@@ -627,7 +642,10 @@ function compare(a: Scalar, b: Scalar, op: string): boolean {
 /* Function implementations                                            */
 /* ------------------------------------------------------------------ */
 
-function evalCall(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function evalCall(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const name = node.name;
 
   // IFERROR / IF need lazy-ish handling of errors, so evaluate args inside.
@@ -700,7 +718,7 @@ function evalCall(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Valu
     case "CLEAN": {
       const t = reqText(scalars()[0]);
       if (isError(t)) return t;
-      // eslint-disable-next-line no-control-regex
+
       return t.replace(/[\x00-\x1F]/g, "");
     }
     case "UPPER": {
@@ -714,7 +732,9 @@ function evalCall(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Valu
     case "PROPER": {
       const t = reqText(scalars()[0]);
       if (isError(t)) return t;
-      return t.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/\B\w/g, (c) => c.toLowerCase());
+      return t
+        .replace(/\b\w/g, (c) => c.toUpperCase())
+        .replace(/\B\w/g, (c) => c.toLowerCase());
     }
     case "LEFT": {
       const args = scalars();
@@ -742,7 +762,10 @@ function evalCall(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Valu
       const len = reqNum(args[2]);
       if (isError(len)) return len;
       if (start < 1) return ERR.value();
-      return t.slice(Math.floor(start) - 1, Math.floor(start) - 1 + Math.max(0, Math.floor(len)));
+      return t.slice(
+        Math.floor(start) - 1,
+        Math.floor(start) - 1 + Math.max(0, Math.floor(len)),
+      );
     }
     case "LEN": {
       const t = reqText(scalars()[0]);
@@ -791,7 +814,8 @@ function evalCall(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Valu
         while ((idx = result.indexOf(oldT, idx)) !== -1) {
           count++;
           if (count === Math.floor(inst)) {
-            result = result.slice(0, idx) + newT + result.slice(idx + oldT.length);
+            result =
+              result.slice(0, idx) + newT + result.slice(idx + oldT.length);
             break;
           }
           idx += oldT.length;
@@ -879,7 +903,8 @@ function evalCall(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Valu
       return isError(nums) ? nums : nums.length;
     }
     case "COUNTA": {
-      return flattenAll(argValues()).filter((v) => !(v === "" || v == null)).length;
+      return flattenAll(argValues()).filter((v) => !(v === "" || v == null))
+        .length;
     }
     case "ROUND":
     case "ROUNDUP":
@@ -943,7 +968,10 @@ function flattenAll(values: Value[]): Scalar[] {
   return values.flatMap((v) => flatten(v));
 }
 
-function collectNumbers(values: Value[], strict = false): number[] | ExcelError {
+function collectNumbers(
+  values: Value[],
+  strict = false,
+): number[] | ExcelError {
   const out: number[] = [];
   for (const s of flattenAll(values)) {
     if (isError(s)) return s;
@@ -982,7 +1010,9 @@ function scalarsAndRanges(
 ): RangeCritArgs {
   const range = flatten(evalNode(node.args[0], ctx));
   const criteria = scalar(evalNode(node.args[1], ctx));
-  const sumRange = node.args[2] ? flatten(evalNode(node.args[2], ctx)) : undefined;
+  const sumRange = node.args[2]
+    ? flatten(evalNode(node.args[2], ctx))
+    : undefined;
   return { range, criteria, sumRange };
 }
 
@@ -1028,7 +1058,10 @@ function rowsMatch(
   return true;
 }
 
-function sumifs(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function sumifs(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const sumRange = flatten(evalNode(node.args[0], ctx));
   const { ranges, crits } = gatherCriteriaPairs(node, ctx, 1);
   let total = 0;
@@ -1042,7 +1075,10 @@ function sumifs(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value 
   return total;
 }
 
-function averageifs(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function averageifs(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const avgRange = flatten(evalNode(node.args[0], ctx));
   const { ranges, crits } = gatherCriteriaPairs(node, ctx, 1);
   let total = 0;
@@ -1058,7 +1094,10 @@ function averageifs(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Va
   return count === 0 ? ERR.div0() : total / count;
 }
 
-function countifs(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function countifs(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const { ranges, crits } = gatherCriteriaPairs(node, ctx, 0);
   if (ranges.length === 0) return 0;
   let count = 0;
@@ -1086,7 +1125,9 @@ function vlookup(
   const indexN = toNumber(scalar(evalNode(node.args[2], ctx)));
   if (isError(indexN)) return indexN;
   const exact =
-    node.args[3] == null ? true : !toBoolSafe(scalar(evalNode(node.args[3], ctx)));
+    node.args[3] == null
+      ? true
+      : !toBoolSafe(scalar(evalNode(node.args[3], ctx)));
 
   const idx = Math.floor(indexN) - 1;
   if (mode === "v") {
@@ -1106,7 +1147,10 @@ function vlookup(
   return ERR.na();
 }
 
-function xlookup(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function xlookup(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const lookup = scalar(evalNode(node.args[0], ctx));
   if (isError(lookup)) return lookup;
   const lookupArr = flatten(evalNode(node.args[1], ctx));
@@ -1120,12 +1164,17 @@ function xlookup(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value
   return ERR.na();
 }
 
-function indexFn(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function indexFn(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const array = asRange(evalNode(node.args[0], ctx));
   if (isError(array)) return array;
   const rowNum = toNumber(scalar(evalNode(node.args[1], ctx)));
   if (isError(rowNum)) return rowNum;
-  const colNum = node.args[2] ? toNumber(scalar(evalNode(node.args[2], ctx))) : 1;
+  const colNum = node.args[2]
+    ? toNumber(scalar(evalNode(node.args[2], ctx)))
+    : 1;
   if (isError(colNum)) return colNum;
 
   // A single-row or single-column range can be indexed one-dimensionally.
@@ -1138,11 +1187,16 @@ function indexFn(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value
   return array[Math.floor(rowNum) - 1]?.[Math.floor(colNum) - 1] ?? ERR.ref();
 }
 
-function matchFn(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value {
+function matchFn(
+  node: Extract<Node, { type: "call" }>,
+  ctx: EvalContext,
+): Value {
   const lookup = scalar(evalNode(node.args[0], ctx));
   if (isError(lookup)) return lookup;
   const arr = flatten(evalNode(node.args[1], ctx));
-  const matchType = node.args[2] ? toNumber(scalar(evalNode(node.args[2], ctx))) : 1;
+  const matchType = node.args[2]
+    ? toNumber(scalar(evalNode(node.args[2], ctx)))
+    : 1;
   if (isError(matchType)) return matchType;
 
   if (matchType === 0) {
@@ -1162,8 +1216,11 @@ function matchFn(node: Extract<Node, { type: "call" }>, ctx: EvalContext): Value
 function matchLookup(cell: Scalar, lookup: Scalar, exact: boolean): boolean {
   if (isError(cell) || isError(lookup)) return false;
   if (exact) {
-    if (typeof cell === "number" && typeof lookup === "number") return cell === lookup;
-    return String(cell).trim().toLowerCase() === String(lookup).trim().toLowerCase();
+    if (typeof cell === "number" && typeof lookup === "number")
+      return cell === lookup;
+    return (
+      String(cell).trim().toLowerCase() === String(lookup).trim().toLowerCase()
+    );
   }
   return compare(cell, lookup, "<=");
 }
@@ -1208,7 +1265,8 @@ function display(v: Value): { display: string; isValue: boolean } {
     if (flat.length === 1) return display(flat[0]);
     return { display: "#VALUE!", isValue: false };
   }
-  if (typeof v === "boolean") return { display: v ? "TRUE" : "FALSE", isValue: true };
+  if (typeof v === "boolean")
+    return { display: v ? "TRUE" : "FALSE", isValue: true };
   if (typeof v === "number") return { display: formatNumber(v), isValue: true };
   return { display: v, isValue: true };
 }
@@ -1219,7 +1277,10 @@ function display(v: Value): { display: string; isValue: boolean } {
  * @param formula  The raw formula text (a leading `=` is optional).
  * @param ctx      Grid data plus the row offset for fill-down semantics.
  */
-export function evaluateFormula(formula: string, ctx: EvalContext): FormulaResult {
+export function evaluateFormula(
+  formula: string,
+  ctx: EvalContext,
+): FormulaResult {
   let src = formula.trim();
   if (src.startsWith("=")) src = src.slice(1);
   // Normalise smart quotes that creep in from copy/paste.
@@ -1257,7 +1318,10 @@ export interface AppliedFormula {
  *   (e.g. an aggregate in E2); a "Result" column is appended and only the first
  *   data row is computed.
  */
-export function applyFormula(dataset: Dataset, formula: string): AppliedFormula {
+export function applyFormula(
+  dataset: Dataset,
+  formula: string,
+): AppliedFormula {
   const colCount = dataset.headers.length;
   const rows = dataset.rows;
 

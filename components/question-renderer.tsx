@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircle2, Eraser, Lightbulb, PlayCircle, XCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  Eraser,
+  Lightbulb,
+  PlayCircle,
+  XCircle,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import type { PublicQuestion } from "@/lib/content";
@@ -68,15 +74,18 @@ export function QuestionRenderer({
   const canApply = isFormula && Boolean(question.dataset);
 
   const [applied, setApplied] = React.useState<AppliedFormula | null>(null);
+  const [appliedFor, setAppliedFor] = React.useState("");
 
-  // Drop stale results whenever the formula or the question changes.
-  React.useEffect(() => {
+  // Drop stale results once the formula text no longer matches what was run.
+  // (Adjusting state during render is the recommended alternative to an effect.)
+  if (applied && value !== appliedFor) {
     setApplied(null);
-  }, [value, question.id]);
+  }
 
   function runFormula() {
     if (!question.dataset || !value.trim()) return;
     setApplied(applyFormula(question.dataset, value));
+    setAppliedFor(value);
   }
 
   return (
@@ -129,8 +138,13 @@ export function QuestionRenderer({
                 className={cn(
                   "flex cursor-pointer items-center gap-3 rounded-md border p-3 text-sm font-normal transition-colors",
                   !readOnly && "hover:bg-accent",
-                  review && isCorrectOption && "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40",
-                  review && selected && !isCorrectOption && "border-destructive bg-destructive/10",
+                  review &&
+                    isCorrectOption &&
+                    "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40",
+                  review &&
+                    selected &&
+                    !isCorrectOption &&
+                    "border-destructive bg-destructive/10",
                 )}
               >
                 <RadioGroupItem id={`${question.id}-${i}`} value={opt} />
@@ -141,7 +155,10 @@ export function QuestionRenderer({
         </RadioGroup>
       ) : question.type === "output_prediction" ? (
         <div className="space-y-1.5">
-          <Label htmlFor={`${question.id}-out`} className="text-xs text-muted-foreground">
+          <Label
+            htmlFor={`${question.id}-out`}
+            className="text-xs text-muted-foreground"
+          >
             Predicted result
           </Label>
           <Input
@@ -156,12 +173,14 @@ export function QuestionRenderer({
       ) : (
         <div className="space-y-1.5">
           <Label className="text-xs text-muted-foreground">
-            {question.type === "fix_formula" ? "Corrected formula" : "Your formula"}
+            {question.type === "fix_formula"
+              ? "Corrected formula"
+              : "Your formula"}
           </Label>
           <FormulaInput
             value={value}
             onChange={onChange}
-            disabled={disabled}
+            disabled={readOnly}
             onEnter={canApply ? runFormula : undefined}
           />
           {canApply ? (
