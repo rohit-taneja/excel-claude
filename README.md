@@ -9,6 +9,8 @@ IFERROR, TRIM, LEFT/RIGHT/MID, PivotTables, Conditional Formatting, Data
 Validation, DATEDIF, NETWORKDAYS, FILTER, SORT, UNIQUE) with lessons, practice
 questions and tests.
 
+
+
 ---
 
 ## 1. What was built
